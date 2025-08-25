@@ -17,17 +17,12 @@
 ########################################################################
 __version__ = '$Revision: #3 $'
 
-from cni.dlo import *
-from .device_base_code import DeviceBase
-from .geometry import *
-from .guard_ring_code import GuardRingType
+from .res_base_code import *
 from .thermal import *
 from .utility_functions import *
 
-import math
 
-
-class rhigh(DeviceBase):
+class rhigh(ResistorBase):
 
     @classmethod
     def defineParamSpecs(cls, specs):
@@ -108,8 +103,10 @@ class rhigh(DeviceBase):
         # return [GuardRingType.NONE, GuardRingType.NWELL, GuardRingType.DNWELL, GuardRingType.PSUB]
         return [GuardRingType.NONE, GuardRingType.NWELL, GuardRingType.PSUB]
 
-    def genDeviceLayout(self):
-        #*************************************************************************
+    def genSingleResistorLayout(self, index: int, x_offset: float) -> ResistorInfo:
+        """
+        Template method defined in res_base_code.ResistorBase
+        """        #*************************************************************************
         #*
         #* Cell Properties
         #*
@@ -231,7 +228,7 @@ class rhigh(DeviceBase):
         # if
         
         # Insertionpoint for contact is at (0-contoverlay:0)    
-        xpos1 = 0-contoverlay
+        xpos1 = 0-contoverlay + x_offset   # x_offset in segmentation array
         ypos1 = 0
         xpos2 = xpos1+wcontact
         ypos2 = 0
@@ -305,7 +302,11 @@ class rhigh(DeviceBase):
                 
         # 26.6.08 GG: new metal block   
         dbCreateRect(self, metlayer, Box(xpos1+contbar_poly_over-endcap, ypos2+(contactpush+li_salblock+li_poly_over-metover)*dir, xpos2-contbar_poly_over+endcap, ypos2+(contactpush+consize+li_salblock+li_poly_over+metover)*dir))
-        MkPin(self, 'PLUS', 1, Box(xpos1+contbar_poly_over-endcap, ypos2+(contactpush+li_salblock+li_poly_over-metover)*dir, xpos2-contbar_poly_over+endcap, ypos2+(contactpush+consize+li_salblock+li_poly_over+metover)*dir), metlayer)
+        plus_pin_box = Box(xpos1+contbar_poly_over-endcap,
+                           ypos2+(contactpush+li_salblock+li_poly_over-metover)*dir,
+                           xpos2-contbar_poly_over+endcap,
+                           ypos2+(contactpush+consize+li_salblock+li_poly_over+metover)*dir)
+        MkPin(self, f"PLUS{index}", 1, plus_pin_box, metlayer)
         
         # set xpos1/xpos2 back to right for resistorbody
         if asymcont :
@@ -483,7 +484,8 @@ class rhigh(DeviceBase):
         bBox = lastCont.getBBox()
         dbCreateRect(self, metlayer, Box(bBox.left-endcap, bBox.bottom-endcap, bBox.right+endcap, bBox.top+endcap))
     
-        MkPin(self, 'MINUS', 2, Box(bBox.left-endcap, bBox.bottom-endcap, bBox.right+endcap, bBox.top+endcap), metlayer)
+        minus_pin_box = Box(bBox.left-endcap, bBox.bottom-endcap, bBox.right+endcap, bBox.top+endcap)
+        MkPin(self, f"MINUS{index}", 2, minus_pin_box, metlayer)
         
         # *********************************************************
         # draw the label
@@ -504,3 +506,6 @@ class rhigh(DeviceBase):
         #lsizey = lbl.bbox.getHeight()
         #scale = min(w/lsizex, (l+2*poly_cont_len)/lsizey)
         #SetSGq(lbl scale height)
+
+        return ResistorInfo(plus_pin_box=plus_pin_box,
+                            minus_pin_box=minus_pin_box)
