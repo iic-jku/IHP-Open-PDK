@@ -19,13 +19,16 @@
 __version__ = '$Revision: #3 $'
 
 from cni.dlo import *
+from .device_base_code import DeviceBase
 from .geometry import *
+from .guard_ring_code import GuardRingType
 from .thermal import *
 from .utility_functions import *
 
 import math
 
-class rsil(DloGen):
+
+class rsil(DeviceBase):
 
     @classmethod
     def defineParamSpecs(self, specs):
@@ -76,6 +79,8 @@ class rsil(DloGen):
         specs('m', '1', 'Multiplier')
         specs('trise', '0.0', 'Temp rise from ambient')
 
+        super().defineParamSpecs(specs)
+
     def setupParams(self, params):
         # process parameter values entered by user
         self.params = params
@@ -84,7 +89,16 @@ class rsil(DloGen):
         self.ps = Numeric(params['ps'])
         self.resistance = Numeric(params['R'])
 
-    def genLayout(self):
+        super().setupParams(params)
+
+    @classmethod
+    def validGuardRingTypes(cls) -> List[GuardRingType]:
+        """
+        Template method for subclasses to restrict the guard ring types
+        """
+        return [GuardRingType.NONE, GuardRingType.NWELL, GuardRingType.DNWELL, GuardRingType.PSUB]
+
+    def genDeviceLayout(self):
         l = self.l
         w = self.w
         ps = self.ps
