@@ -39,7 +39,7 @@ else:
 class GuardRingType(StrEnum):
     NONE = 'none'
     NWELL = 'nwell'
-    DNWELL = 'dnwell'
+    # DNWELL = 'dnwell'
     PSUB = 'psub'
 
     @classmethod
@@ -156,10 +156,10 @@ def generate_guard_ring(dlo_gen: DloGen,
 
     if guard_ring_type == 'nwell':
         draw_well_box(nwell, xl, yb, xr, yt, wguard, ndiff_over)
-    elif guard_ring_type == 'dnwell':
-        nbulay_over = (nbulay_min_w - wguard) / 2.0
-        draw_well_box(nwell, xl, yb, xr, yt, wguard, nbulay_over)
-        draw_well_box(nbulay, xl, yb, xr, yt, wguard, nbulay_over)
+    # elif guard_ring_type == 'dnwell':
+    #     nbulay_over = (nbulay_min_w - wguard) / 2.0
+    #     draw_well_box(nwell, xl, yb, xr, yt, wguard, nbulay_over)
+    #     draw_well_box(nbulay, xl, yb, xr, yt, wguard, nbulay_over)
     elif guard_ring_type == 'psub':
         draw_well_box(sub, xl, yb, xr, yt, wguard, pdiffx_over)
         draw_well_box(psd, xl, yb, xr, yt, wguard, pdiffx_over)
@@ -168,7 +168,7 @@ def generate_guard_ring(dlo_gen: DloGen,
 class guard_ring(DloGen):
     @classmethod
     def defineParamSpecs(cls, specs):
-        specs('type', 'ntap', 'Guard Ring Type', ChoiceConstraint(['nwell', 'dnwell', 'psub']))
+        specs('type', 'ntap', 'Guard Ring Type', ChoiceConstraint(['nwell', 'psub']))  # 'dnwell'
         specs('w', '3.05u', 'Width')
         specs('h', '3.05u', 'Height')
 
