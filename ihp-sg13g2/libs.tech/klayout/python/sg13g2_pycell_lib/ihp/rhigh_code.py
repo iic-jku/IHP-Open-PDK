@@ -18,13 +18,16 @@
 __version__ = '$Revision: #3 $'
 
 from cni.dlo import *
+from .device_base_code import DeviceBase
 from .geometry import *
+from .guard_ring_code import GuardRingType
 from .thermal import *
 from .utility_functions import *
 
 import math
 
-class rhigh(DloGen):
+
+class rhigh(DeviceBase):
 
     @classmethod
     def defineParamSpecs(cls, specs):
@@ -80,7 +83,9 @@ class rhigh(DloGen):
         specs('PWB', 'No', 'PWell Blockage', ChoiceConstraint(['Yes', 'No']))
         specs('m', '1', 'Multiplier')
         specs('trise', '0.0', 'Temp rise from ambient')
-        
+
+        super().defineParamSpecs(specs)
+
     def setupParams(self, params):
         # process parameter values entered by user
         self.l = Numeric(params['l'])
@@ -93,7 +98,17 @@ class rhigh(DloGen):
         self.techparams = self.tech.getTechParams()
         self.epsilon = self.techparams['epsilon1']  
 
-    def genLayout(self):  
+        super().setupParams(params)
+
+    @classmethod
+    def validGuardRingTypes(cls) -> List[GuardRingType]:
+        """
+        Template method for subclasses to restrict the guard ring types
+        """
+        # return [GuardRingType.NONE, GuardRingType.NWELL, GuardRingType.DNWELL, GuardRingType.PSUB]
+        return [GuardRingType.NONE, GuardRingType.NWELL, GuardRingType.PSUB]
+
+    def genDeviceLayout(self):
         #*************************************************************************
         #*
         #* Cell Properties
