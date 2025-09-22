@@ -268,14 +268,3 @@ class ViaPCell(pya.PCellDeclarationHelper):
                 for iy in range(ny):
                     cy = y0 + iy * (v + s)
                     scut.insert(pya.DBox(cx - 0.5*v, cy - 0.5*v, cx + 0.5*v, cy + 0.5*v))
-
-
-class SG13G2_ViaLib(pya.Library):
-    def __init__(self):
-        self.description = "SG13G2 Via Stack Library"
-        self.layout().register_pcell("ViaStack", ViaPCell())
-        self.register("SG13_ViaLib")
-        self.technology = 'sg13g2'
-
-
-SG13G2_ViaLib()
