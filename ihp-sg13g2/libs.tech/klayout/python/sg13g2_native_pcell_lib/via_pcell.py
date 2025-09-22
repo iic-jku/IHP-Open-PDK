@@ -185,13 +185,21 @@ class ViaPCell(pya.PCellDeclarationHelper):
         return self.via_type_list
         
     def display_text_impl(self): 
-        return f"SG13G2_ViaStack({self.bottom_layer.name}→{self.top_layer.name})"
+        return f"SG13G2_ViaStack({self.bottom_layer.name}->{self.top_layer.name})"
 
     def coerce_parameters_impl(self):
         bl_idx = self.pdk_info.layers.index(self.bottom_layer)
         tl_idx = self.pdk_info.layers.index(self.top_layer)
         
-        error_found = bl_idx >= tl_idx
+        if bl_idx > tl_idx:  # swap layers if the order is wrong
+            tmp = self.bottom_layer
+            self.bottom_layer = self.top_layer
+            self.top_layer = tmp
+
+        error_found = False
+
+        if not error_found and bl_idx == tl_idx:
+            error_found = True
         
         if not error_found:
             match (self.bottom_layer.name, self.top_layer.name):
