@@ -217,7 +217,7 @@ class ViaPCell(pya.PCellDeclarationHelper):
         ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
         #
         # return f"SG13G2_ViaStack({self.bottom_layer.name}->{self.top_layer.name})"
-        return f"SG13G2_ViaStack({self.via})"
+        return f"{self.via}"
 
     def coerce_parameters_impl(self):
         ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
