@@ -26,7 +26,7 @@ import pya
 
 
 def via(name: str, 
-        desc: str, 
+        description: str, 
         bottom: pya.LayerInfo, 
         cut: pya.LayerInfo, 
         top: pya.LayerInfo,
@@ -40,7 +40,7 @@ def via(name: str,
         enc_top: float,
         vwidth: float,
         vspace: float) -> ViaType:
-    vt = pya.ViaType(name, desc)
+    vt = pya.ViaType(name, description)
     vt.bottom = bottom
     vt.cut = cut
     vt.top = top
@@ -86,28 +86,36 @@ class PDKInfo:
             ld: Dict[str, pya.LayerInfo] = {l.name: l for l in layers}
         
             vias = [
-                via(name='SG13G2_VIA_GATPOLY_M1', desc='Cont (over GatPoly)', bottom=ld['GatPoly'], cut=ld['Cont'], top=ld['Metal1'], 
+                via(name='SG13G2_CONT_GATPOLY_M1', description='Cont (GatPoly→Metal1)', 
+                    bottom=ld['GatPoly'], cut=ld['Cont'], top=ld['Metal1'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.07, enc_top=0.05, vwidth=0.16, vspace=0.18),
-                via(name='SG13G2_VIA_ACTIV_M1', desc='Cont (over Activ)', bottom=ld['Activ'], cut=ld['Cont'], top=ld['Metal1'], 
+                via(name='SG13G2_CONT_ACTIV_M1', description='Cont (Activ→Metal1)', 
+                    bottom=ld['Activ'], cut=ld['Cont'], top=ld['Metal1'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.07, enc_top=0.05, vwidth=0.16, vspace=0.18),
-                via(name='SG13G2_VIA_M1_M2', desc='Via1 (Metal1→Metal2)', bottom=ld['Metal1'], cut=ld['Via1'], top=ld['Metal2'], 
+                via(name='SG13G2_VIA_M1_M2', description='Via1 (Metal1→Metal2)', 
+                    bottom=ld['Metal1'], cut=ld['Via1'], top=ld['Metal2'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
-                via(name='SG13G2_VIA_M2_M3', desc='Via2 (Metal2→Metal3)', bottom=ld['Metal2'], cut=ld['Via2'], top=ld['Metal3'], 
+                via(name='SG13G2_VIA_M2_M3', description='Via2 (Metal2→Metal3)', 
+                    bottom=ld['Metal2'], cut=ld['Via2'], top=ld['Metal3'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
-                via(name='SG13G2_VIA_M3_M4', desc='Via3 (Metal3→Metal4)', bottom=ld['Metal3'], cut=ld['Via3'], top=ld['Metal4'], 
+                via(name='SG13G2_VIA_M3_M4', description='Via3 (Metal3→Metal4)', 
+                    bottom=ld['Metal3'], cut=ld['Via3'], top=ld['Metal4'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
-                via(name='SG13G2_VIA_M4_M5', desc='Via4 (Metal4→Metal5)', bottom=ld['Metal4'], cut=ld['Via4'], top=ld['Metal5'], 
+                via(name='SG13G2_VIA_M4_M5', description='Via4 (Metal4→Metal5)', 
+                    bottom=ld['Metal4'], cut=ld['Via4'], top=ld['Metal5'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
-                via(name='SG13G2_VIA_M5_TM1', desc='TopVia1 (Metal5→TopMetal1)', bottom=ld['Metal5'], cut=ld['TopVia1'], top=ld['TopMetal1'], 
+                via(name='SG13G2_VIA_M5_TM1', description='TopVia1 (Metal5→TopMetal1)', 
+                    bottom=ld['Metal5'], cut=ld['TopVia1'], top=ld['TopMetal1'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.10, enc_top=0.42, vwidth=0.42, vspace=0.42),
-                via(name='SG13G2_VIA_TM1_TM2', desc='TopVia2 (TopMetal1→TopMetal2)', bottom=ld['TopMetal1'], cut=ld['TopVia2'], top=ld['TopMetal2'], 
+                via(name='SG13G2_VIA_TM1_TM2', description='TopVia2 (TopMetal1→TopMetal2)', 
+                    bottom=ld['TopMetal1'], cut=ld['TopVia2'], top=ld['TopMetal2'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
                     enc_bottom=0.50, enc_top=0.50, vwidth=0.90, vspace=1.06),
             ]        
@@ -117,6 +125,9 @@ class PDKInfo:
     
     def layer_by_name(self, name: str) -> pya.LayerInfo:
         return [l for l in self.layers if l.name == name][0]
+
+    def via_by_name(self, name: str) -> pya.ViaType:
+        return [v for v in self.vias if v.name == name][0]
 
     @cached_property
     def via_layers(self) -> Set[pya.LayerInfo]:
@@ -129,6 +140,10 @@ class PDKInfo:
     @cached_property
     def layer_choices(self) -> List[Tuple[str, pya.LayerInfo]]:
         return [(l.name, l) for l in self.non_via_layers]
+    
+    @cached_property
+    def via_choices(self) -> List[Tuple[str, str]]:
+        return [(v.description, v.name) for v in self.vias]
     
     def num_stack_steps(self, bot: pya.LayerInfo, top: pya.LayerInfo) -> int:
         bi = self.layers.index(bot)
@@ -163,31 +178,54 @@ class ViaPCell(pya.PCellDeclarationHelper):
         self.pdk_info = PDKInfo.instance()
 
         # Endpoints
-        self.param("bottom_layer", self.TypeList, "Bottom Layer", 
-                   choices=self.pdk_info.layer_choices, default=self.pdk_info.layer_by_name('Metal1'))
-        self.param("top_layer",   self.TypeLayer, "Top Layer", 
-                   choices=self.pdk_info.layer_choices, default=self.pdk_info.layer_by_name('Metal2'))
+        self.param("via", self.TypeList, "Via", choices=self.pdk_info.via_choices, default='SG13G2_VIA_M1_M2')
+        
+        ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
+        #
+        # self.param("bottom_layer", self.TypeLayer, "Bottom Layer", 
+        #           choices=self.pdk_info.layer_choices, default=self.pdk_info.layer_by_name('Metal1'))
+        # self.param("top_layer",   self.TypeLayer, "Top Layer", 
+        #           choices=self.pdk_info.layer_choices, default=self.pdk_info.layer_by_name('Metal2'))
         
 	 # Optional array override
         self.param("nx", self.TypeInt, "nx", default=0)
         self.param("ny", self.TypeInt, "ny", default=0)
 
         # Optional plane sizes
-        self.param("w_bottom", self.TypeDouble, "Bottom width [um]",  default=0.0)
-        self.param("h_bottom", self.TypeDouble, "Bottom height [um]", default=0.0)
-        self.param("w_top",    self.TypeDouble, "Top width [um]",     default=0.0)
-        self.param("h_top",    self.TypeDouble, "Top height [um]",    default=0.0)
-    
-        self.via_type_list = self.pdk_info.vias
+        self.param("w_bottom", self.TypeDouble, "Bottom width [µm]",  default=0.0)
+        self.param("h_bottom", self.TypeDouble, "Bottom height [µm]", default=0.0)
+        self.param("w_top",    self.TypeDouble, "Top width [µm]",     default=0.0)
+        self.param("h_top",    self.TypeDouble, "Top height [µm]",    default=0.0)
+
+    def dump_params(self):
+        params = []
+        for p in self.get_parameters():
+            params += [f"{p.name}={getattr(self, p.name, None)}"]
+        msg = ', '.join(params)
+        print(f"ViaPCell.dump_params: {msg}")
+
+    def callback_impl(self, name: str):
+        # print(f"ViaPCell.callback_impl: name={name}. Params: ", end='')
+        # self.dump_params()
+        pass
     
     # Wire tool support
     def via_types(self): 
-        return self.via_type_list
+        return self.pdk_info.vias
         
-    def display_text_impl(self): 
-        return f"SG13G2_ViaStack({self.bottom_layer.name}->{self.top_layer.name})"
+    def display_text_impl(self):
+        ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
+        #
+        # return f"SG13G2_ViaStack({self.bottom_layer.name}->{self.top_layer.name})"
+        return f"SG13G2_ViaStack({self.via})"
 
     def coerce_parameters_impl(self):
+        ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
+        return
+                      
+        # print(f"ViaPCell.coerce_parameters_impl: ", end='')
+        # self.dump_params()
+        
         bl_idx = self.pdk_info.layers.index(self.bottom_layer)
         tl_idx = self.pdk_info.layers.index(self.top_layer)
         
@@ -211,7 +249,6 @@ class ViaPCell(pya.PCellDeclarationHelper):
         if error_found:
             self.bottom_layer = self.pdk_info.layer_by_name('Metal1')
             self.top_layer = self.pdk_info.layer_by_name('Metal2')
-            
     
     def can_create_from_shape_impl(self):
         return False
@@ -244,7 +281,10 @@ class ViaPCell(pya.PCellDeclarationHelper):
         shapes.insert(pya.DBox(-0.5*w, -0.5*h, 0.5*w, 0.5*h))
     
     def produce_impl(self):
-        vias = self.pdk_info.get_vias(self.bottom_layer, self.top_layer)
+        ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
+        # vias = self.pdk_info.get_vias(self.bottom_layer, self.top_layer)
+        vias = [self.pdk_info.via_by_name(self.via)]
+        
         if not vias: 
             return
 
