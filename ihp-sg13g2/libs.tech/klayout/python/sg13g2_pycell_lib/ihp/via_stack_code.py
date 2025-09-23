@@ -38,7 +38,7 @@ class via_stack(DloGen):
         specs('cdf_version', CDFVersion, 'CDF Version')
 #endif
 
-        specs('b_layer', 'Metal1', 'Bottom layer', ChoiceConstraint(['Metal1', 'Metal2', 'Metal3', 'Metal4', 'Metal5', 'TopMetal1', 'TopMetal2']))
+        specs('b_layer', 'Metal1', 'Bottom layer', ChoiceConstraint(['Activ', 'GatPoly', 'Metal1', 'Metal2', 'Metal3', 'Metal4', 'Metal5', 'TopMetal1', 'TopMetal2']))
         specs('t_layer', 'Metal2', 'Top layer', ChoiceConstraint(['Metal1', 'Metal2', 'Metal3', 'Metal4', 'Metal5', 'TopMetal1', 'TopMetal2']))
         specs('vn_columns', 2, 'Via_n Columns')
         specs('vn_rows', 2, 'Via_n Rows')
@@ -80,6 +80,12 @@ class via_stack(DloGen):
 
         epsilon = techparams['epsilon1']
 
+        cnt_size = techparams['Cnt_a']
+        cnt_sep1 = techparams['Cnt_b']
+        cnt_sep2 = techparams['Cnt_b1']
+        cnt_activ_enc = techparams['Cnt_c']
+        cnt_gatpoly_enc = techparams['Cnt_d']
+
         v1_size = techparams['V1_a']
         v1_sep1 = techparams['V1_b']
         v1_sep2 = techparams['V1_b1']
@@ -115,8 +121,10 @@ class via_stack(DloGen):
         vt2_columns = self.vt2_columns
         vt2_rows = self.vt2_rows
 
+        device_layers = ['Activ', 'GatPoly']
         metal_layers = ['Metal1', 'Metal2', 'Metal3', 'Metal4', 'Metal5', 'TopMetal1', 'TopMetal2']
-        via_layers = ['Via1', 'Via2', 'Via3', 'Via4', 'TopVia1', 'TopVia2']
+        device_and_metal_layers = device_layers + metal_layers
+        via_layers = ['Cont', 'Via1', 'Via2', 'Via3', 'Via4', 'TopVia1', 'TopVia2']
         
         #*************************************************************************
         #*
@@ -124,16 +132,41 @@ class via_stack(DloGen):
         #*
         #************************************************************************
 
-        idx_b = metal_layers.index(b_layer)
-        idx_t = metal_layers.index(t_layer)
+        idx_b = device_and_metal_layers.index(b_layer)
+        idx_t = device_and_metal_layers.index(t_layer)
         if idx_b > idx_t:
             idx_b, idx_t = idx_t, idx_b
-        stack_layers = metal_layers[idx_b:idx_t+1]
+
+        # NOTE: device_layers are mutual exclusive
+        if b_layer in device_layers:
+            if t_layer in device_layers:
+                # this is not allowed, coerce top layer to Metal1
+                stack_layers = [b_layer, 'Metal1']
+            else:
+                m_idx_t = idx_t - len(device_layers)  # skip other device layer
+                stack_layers = [b_layer] + metal_layers[0:m_idx_t+1]
+        else:
+            stack_layers = device_and_metal_layers[idx_b:idx_t+1]
         
         for layer in stack_layers:
-
             #pre-procesing
-            if layer == 'Metal1':
+            if layer == 'Activ':
+                columns = vn_columns
+                rows = vn_rows
+                via_size = cnt_size
+                via_sep = cnt_sep1 if (columns<4 and rows<4) else cnt_sep2
+                via_enc = cnt_activ_enc
+                w_x = (columns * via_size + (columns - 1) * via_sep)
+                w_y = (rows * via_size + (rows - 1) * via_sep)
+            elif layer == 'GatPoly':
+                columns = vn_columns
+                rows = vn_rows
+                via_size = cnt_size
+                via_sep = cnt_sep1 if (columns<4 and rows<4) else cnt_sep2
+                via_enc = cnt_gatpoly_enc
+                w_x = (columns * via_size + (columns - 1) * via_sep)
+                w_y = (rows * via_size + (rows - 1) * via_sep)
+            elif layer == 'Metal1':
                 columns = vn_columns
                 rows = vn_rows
                 via_size = v1_size
@@ -141,7 +174,6 @@ class via_stack(DloGen):
                 via_enc = v1_enc
                 w_x = (columns * via_size + (columns - 1) * via_sep)
                 w_y = (rows * via_size + (rows - 1) * via_sep)
-
             elif layer == 'TopMetal1':
                 via_size = Topvia1_size
                 via_sep = TopVia1_sep
@@ -153,7 +185,6 @@ class via_stack(DloGen):
                 if "Metal5" in stack_layers:
                     dbCreateRect(self, 'Metal5', Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2 + via_enc, w_y/2 + via_enc))
                 via_enc = Topvia1_enc_top1
-
             elif layer == 'TopMetal2':
                 via_size = Topvia2_size
                 via_sep = TopVia2_sep
@@ -164,7 +195,6 @@ class via_stack(DloGen):
                 w_y = (rows * via_size + (rows - 1) * via_sep)
                 dbCreateRect(self, 'TopMetal1', Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2+via_enc, w_y/2+via_enc))
                 via_enc = Topvia2_enc_top2
-
             else:
                 columns = vn_columns
                 rows = vn_rows
@@ -186,7 +216,7 @@ class via_stack(DloGen):
 
             #via draw
             if layer != b_layer:
-                via_layer = via_layers[metal_layers.index(layer)-1]
+                via_layer = via_layers[stack_layers.index(layer)]
                 for i in range(columns):
                     x0 = i * via_sep + i * via_size - w_x/2
                     for j in range(rows):
