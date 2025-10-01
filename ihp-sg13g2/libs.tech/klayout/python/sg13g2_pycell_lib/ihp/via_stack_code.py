@@ -175,7 +175,7 @@ class via_stack(DloGen):
                 via_enc = v1_enc
                 w_x = (columns * via_size + (columns - 1) * via_sep)
                 w_y = (rows * via_size + (rows - 1) * via_sep)
-            elif layer == 'TopMetal1':
+            elif layer == 'Metal5':
                 via_size = Topvia1_size
                 via_sep = TopVia1_sep
                 via_enc = Topvia1_enc_met5
@@ -183,9 +183,16 @@ class via_stack(DloGen):
                 rows = vt1_rows
                 w_x = (columns * via_size + (columns - 1) * via_sep)
                 w_y = (rows * via_size + (rows - 1) * via_sep)
-                if previous_layer == 'Metal5':
-                    dbCreateRect(self, 'Metal5', Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2 + via_enc, w_y/2 + via_enc))
                 via_enc = Topvia1_enc_top1
+            elif layer == 'TopMetal1':
+                via_size = Topvia2_size
+                via_sep = TopVia2_sep
+                via_enc = Topvia2_enc_top1
+                columns = vt2_columns
+                rows = vt2_rows
+                w_x = (columns * via_size + (columns - 1) * via_sep)
+                w_y = (rows * via_size + (rows - 1) * via_sep)
+                via_enc = Topvia2_enc_top2
             elif layer == 'TopMetal2':
                 via_size = Topvia2_size
                 via_sep = TopVia2_sep
@@ -194,7 +201,6 @@ class via_stack(DloGen):
                 rows = vt2_rows
                 w_x = (columns * via_size + (columns - 1) * via_sep)
                 w_y = (rows * via_size + (rows - 1) * via_sep)
-                dbCreateRect(self, 'TopMetal1', Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2+via_enc, w_y/2+via_enc))
                 via_enc = Topvia2_enc_top2
             else:
                 columns = vn_columns
