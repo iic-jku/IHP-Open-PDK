@@ -80,6 +80,7 @@ class PDKInfo:
                 pya.LayerInfo(67, 0, 'Metal5'),
                 pya.LayerInfo(125, 0, 'TopVia1'),
                 pya.LayerInfo(126, 0, 'TopMetal1'),
+
                 pya.LayerInfo(133, 0, 'TopVia2'),
                 pya.LayerInfo(134, 0, 'TopMetal2'),
             ]
@@ -112,14 +113,14 @@ class PDKInfo:
                     enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
                 via(name='SG13G2_VIA_M5_TM1', description='TopVia1 (Metal5→TopMetal1)', 
                     bottom=ld['Metal5'], cut=ld['TopVia1'], top=ld['TopMetal1'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=1.64, htmin=1.64,
                     enc_bottom=0.10, enc_top=0.42, vwidth=0.42, vspace=0.42),
                 via(name='SG13G2_VIA_TM1_TM2', description='TopVia2 (TopMetal1→TopMetal2)', 
                     bottom=ld['TopMetal1'], cut=ld['TopVia2'], top=ld['TopMetal2'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                    bottom_grid=0.005, top_grid=0.005, wbmin=1.64, hbmin=1.64, wtmin=2.0, htmin=2.0,
                     enc_bottom=0.50, enc_top=0.50, vwidth=0.90, vspace=1.06),
             ]        
-        
+
             cls._instance = PDKInfo(layers=layers, vias=vias)
         return cls._instance
     
@@ -300,10 +301,10 @@ class ViaPCell(pya.PCellDeclarationHelper):
             wcut = nx * v + (nx - 1) * s
             hcut = ny * v + (ny - 1) * s
 
-            wbot = max(self.w_bottom if idx == 0 else 0.0, 2.0*via.enc_bottom + wcut)
-            hbot = max(self.h_bottom if idx == 0 else 0.0, 2.0*via.enc_bottom + hcut)
-            wtop = max(self.w_top    if idx == len(vias)-1 else 0.0, 2.0*via.enc_top + wcut)
-            htop = max(self.h_top    if idx == len(vias)-1 else 0.0, 2.0*via.enc_top + hcut)
+            wbot = max(via.wbmin, self.w_bottom if idx == 0 else 0.0,           2.0*via.enc_bottom + wcut)
+            hbot = max(via.hbmin, self.h_bottom if idx == 0 else 0.0,           2.0*via.enc_bottom + hcut)
+            wtop = max(via.wtmin, self.w_top    if idx == len(vias)-1 else 0.0, 2.0*via.enc_top + wcut)
+            htop = max(via.htmin, self.h_top    if idx == len(vias)-1 else 0.0, 2.0*via.enc_top + hcut)
 
             self._insert_dbox_centered(self.cell.shapes(bottom_ly), wbot, hbot)
             self._insert_dbox_centered(self.cell.shapes(top_ly),    wtop, htop)
