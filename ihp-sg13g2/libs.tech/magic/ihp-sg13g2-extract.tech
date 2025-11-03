@@ -69,7 +69,7 @@ variants (),(hrhc),(lrhc),(hrlc),(lrlc)
 # Section 6.5 nmosi and nmosiHV
 # average sheet resistance of 3 kΩ
 
-variants ()
+variants (),(lvs)
 
  # TBD values for nwell, dnwell
 
