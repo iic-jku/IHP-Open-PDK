@@ -62,10 +62,15 @@ backend option offers 5 thin metal layers, two thick metal layers (2 and 3 μm t
     * GDSII
 * KLayout tool data:
     * layer property and tech files
-    * DRC rules (minimal/maximal set)
+    * DRC rules
     * LVS rules
-    * PyCells (1st priority)
+    * PyCells
     * XSection initial settings
+    * 2.5D viewer configuration
+* Magic tool data:
+    * tech files, parasitic extraction rules
+    * DRC rules
+    * LVS rules
 * MOS/HBT/Passive device models for ngspice/Xyce
 * xschem: primitive device symbols, settings and testbenches
 * Qucs-S: primitive device symbols, settings and testbenches
@@ -91,12 +96,17 @@ backend option offers 5 thin metal layers, two thick metal layers (2 and 3 μm t
 * KLayout
     * Download: https://www.klayout.de/build.html
     * Source: https://github.com/KLayout/klayout
+* Magic
+    * Download: http://opencircuitdesign.com/magic/download.html
+    * Source: https://github.com/RTimothyEdwards/magic
 * OpenEMS
     * Source: https://github.com/thliebig/openEMS-Project
 * OpenROAD
     * Source: https://github.com/The-OpenROAD-Project/OpenROAD
 * OpenROAD-flow-scripts
     * Source: https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts
+* LibreLane
+    * Source: https://github.com/librelane/librelane
  
 ## Tool versions (tested with)
 [versions.txt](versions.txt)
