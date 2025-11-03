@@ -20,8 +20,8 @@ There is a minimum version of magic required to run correctly
 with the IHP Open PDK.  This minimum version is stated in the
 tech file (`ihp-sg13g2.tech`) in the "version" section.  As of the
 beta pre-release of magic/netgen support for IHP SG13G2, the
-minimum required version of magic is 8.3.572 (version dated
-October 31, 2025).  Earlier versions of magic can be used by
+minimum required version of magic is 8.3.573 (version dated
+November 3, 2025).  Earlier versions of magic can be used by
 commenting out the "requires" line from the tech file, but some
 tech file contents may not be recognized or may not work correctly.
 

@@ -31,7 +31,7 @@ end
 version
  version 1.0.0
  description "IHP SG13G2: Open Source rules and DRC"
- requires magic-8.3.572
+ requires magic-8.3.573
 end
 
 #------------------------------------------------------------------------
