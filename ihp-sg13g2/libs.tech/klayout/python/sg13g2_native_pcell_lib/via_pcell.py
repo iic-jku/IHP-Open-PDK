@@ -25,6 +25,19 @@ from typing import *
 import pya
 
 
+NX = int
+NY = int
+SpaceLambda = Callable[[NX, NY], Tuple[float, float]]
+
+
+@dataclass
+class ViaExtraInfo:
+    enc_bottom: float
+    enc_top: float
+    width: float
+    space_lambda: SpaceLambda
+
+
 def via(name: str, 
         description: str, 
         bottom: pya.LayerInfo, 
@@ -36,10 +49,7 @@ def via(name: str,
         hbmin: float,
         wtmin: float,
         htmin: float,
-        enc_bottom: float,
-        enc_top: float,
-        vwidth: float,
-        vspace: float) -> ViaType:
+        extra_info: ViaExtraInfo) -> ViaType:
     vt = pya.ViaType(name, description)
     vt.bottom = bottom
     vt.cut = cut
@@ -50,10 +60,7 @@ def via(name: str,
     vt.hbmin = hbmin
     vt.wtmin = wtmin
     vt.htmin = htmin
-    vt.enc_bottom = enc_bottom
-    vt.enc_top = enc_top
-    vt.vwidth = vwidth
-    vt.vspace = vspace
+    vt.extra_info = extra_info
     return vt
 
 
@@ -90,37 +97,61 @@ class PDKInfo:
                 via(name='SG13G2_CONT_GATPOLY_M1', description='Cont (GatPoly→Metal1)', 
                     bottom=ld['GatPoly'], cut=ld['Cont'], top=ld['Metal1'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    enc_bottom=0.07, enc_top=0.05, vwidth=0.16, vspace=0.18),
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.07, enc_top=0.05, width=0.16, 
+                        space_lambda=lambda nx, ny: (0.20, 0.18) if nx > 4 and ny > 4 else (0.18, 0.18)
+                    )),
                 via(name='SG13G2_CONT_ACTIV_M1', description='Cont (Activ→Metal1)', 
                     bottom=ld['Activ'], cut=ld['Cont'], top=ld['Metal1'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    enc_bottom=0.07, enc_top=0.05, vwidth=0.16, vspace=0.18),
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.07, enc_top=0.05, width=0.16, 
+                        space_lambda=lambda nx, ny: (0.20, 0.18) if nx > 4 and ny > 4 else (0.18, 0.18)
+                    )),
                 via(name='SG13G2_VIA_M1_M2', description='Via1 (Metal1→Metal2)', 
                     bottom=ld['Metal1'], cut=ld['Via1'], top=ld['Metal2'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
+                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
+                    )),
                 via(name='SG13G2_VIA_M2_M3', description='Via2 (Metal2→Metal3)', 
                     bottom=ld['Metal2'], cut=ld['Via2'], top=ld['Metal3'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
+                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
+                    )),
                 via(name='SG13G2_VIA_M3_M4', description='Via3 (Metal3→Metal4)', 
                     bottom=ld['Metal3'], cut=ld['Via3'], top=ld['Metal4'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
+                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
+                    )),
                 via(name='SG13G2_VIA_M4_M5', description='Via4 (Metal4→Metal5)', 
                     bottom=ld['Metal4'], cut=ld['Via4'], top=ld['Metal5'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    enc_bottom=0.05, enc_top=0.05, vwidth=0.19, vspace=0.22),
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
+                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
+                    )),
                 via(name='SG13G2_VIA_M5_TM1', description='TopVia1 (Metal5→TopMetal1)', 
                     bottom=ld['Metal5'], cut=ld['TopVia1'], top=ld['TopMetal1'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=1.64, htmin=1.64,
-                    enc_bottom=0.10, enc_top=0.42, vwidth=0.42, vspace=0.42),
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.10, enc_top=0.42, width=0.42, 
+                        space_lambda=lambda nx, ny: (0.42, 0.42)
+                    )),
                 via(name='SG13G2_VIA_TM1_TM2', description='TopVia2 (TopMetal1→TopMetal2)', 
                     bottom=ld['TopMetal1'], cut=ld['TopVia2'], top=ld['TopMetal2'], 
                     bottom_grid=0.005, top_grid=0.005, wbmin=1.64, hbmin=1.64, wtmin=2.0, htmin=2.0,
-                    enc_bottom=0.50, enc_top=0.50, vwidth=0.90, vspace=1.06),
-            ]        
-
+                    extra_info=ViaExtraInfo(
+                        enc_bottom=0.50, enc_top=0.50, width=0.90, 
+                        space_lambda=lambda nx, ny: (1.06, 1.06)
+                    )),
+            ]
+            
             cls._instance = PDKInfo(layers=layers, vias=vias)
         return cls._instance
     
@@ -268,14 +299,20 @@ class ViaPCell(pya.PCellDeclarationHelper):
         return min(a - 2.0 * da, b - 2.0 * db)
 
     def _compute_nxy(self, vias: List[pya.ViaType]) -> (int, int):
-        enc_b = vias[0].enc_bottom
-        enc_t = vias[-1].enc_top
+        enc_b = vias[0].extra_info.enc_bottom
+        enc_t = vias[-1].extra_info.enc_top
         w_eff = self._min_dim_after_enc(self.w_bottom, self.w_top, enc_b, enc_t)
         h_eff = self._min_dim_after_enc(self.h_bottom, self.h_top, enc_b, enc_t)
-        pitch = min(v.vwidth + v.vspace for v in vias)
-        vsize = min(v.vwidth for v in vias)
-        nx = self.nx if self.nx > 0 else (max(1, int(math.floor((w_eff + (pitch - vsize)) / pitch + 1e-10))) if w_eff > 0 else 1)
-        ny = self.ny if self.ny > 0 else (max(1, int(math.floor((h_eff + (pitch - vsize)) / pitch + 1e-10))) if h_eff > 0 else 1)
+        x_pitch = float('inf')
+        y_pitch = float('inf')
+        vsize = float('inf')
+        for v in vias:
+            x_space, y_space = v.extra_info.space_lambda(max(1, self.nx), max(1, self.ny))
+            x_pitch = min(x_pitch, v.extra_info.width + x_space)
+            y_pitch = min(y_pitch, v.extra_info.width + y_space)
+            vsize = min(vsize, v.extra_info.width)
+        nx = self.nx if self.nx > 0 else (max(1, int(math.floor((w_eff + (x_pitch - vsize)) / x_pitch + 1e-10))) if w_eff > 0 else 1)
+        ny = self.ny if self.ny > 0 else (max(1, int(math.floor((h_eff + (y_pitch - vsize)) / y_pitch + 1e-10))) if h_eff > 0 else 1)
         return nx, ny
     
     def _insert_dbox_centered(self, shapes: pya.Shapes, w: float, h: float):
@@ -296,24 +333,26 @@ class ViaPCell(pya.PCellDeclarationHelper):
             top_ly    = self.layout.layer(via.top)
             cut_ly    = self.layout.layer(via.cut)
 
-            v = via.vwidth
-            s = via.vspace
-            wcut = nx * v + (nx - 1) * s
-            hcut = ny * v + (ny - 1) * s
+            v = via.extra_info.width
+            sx, sy = via.extra_info.space_lambda(nx, ny)
+            enc_bot = via.extra_info.enc_bottom
+            enc_top = via.extra_info.enc_top
+            wcut = nx * v + (nx - 1) * sx
+            hcut = ny * v + (ny - 1) * sy
 
-            wbot = max(via.wbmin, self.w_bottom if idx == 0 else 0.0,           2.0*via.enc_bottom + wcut)
-            hbot = max(via.hbmin, self.h_bottom if idx == 0 else 0.0,           2.0*via.enc_bottom + hcut)
-            wtop = max(via.wtmin, self.w_top    if idx == len(vias)-1 else 0.0, 2.0*via.enc_top + wcut)
-            htop = max(via.htmin, self.h_top    if idx == len(vias)-1 else 0.0, 2.0*via.enc_top + hcut)
+            wbot = max(via.wbmin, self.w_bottom if idx == 0 else 0.0,           2.0*enc_bot + wcut)
+            hbot = max(via.hbmin, self.h_bottom if idx == 0 else 0.0,           2.0*enc_bot + hcut)
+            wtop = max(via.wtmin, self.w_top    if idx == len(vias)-1 else 0.0, 2.0*enc_top + wcut)
+            htop = max(via.htmin, self.h_top    if idx == len(vias)-1 else 0.0, 2.0*enc_top + hcut)
 
             self._insert_dbox_centered(self.cell.shapes(bottom_ly), wbot, hbot)
             self._insert_dbox_centered(self.cell.shapes(top_ly),    wtop, htop)
 
             scut = self.cell.shapes(cut_ly)
-            x0 = -0.5 * (nx - 1) * (v + s)
-            y0 = -0.5 * (ny - 1) * (v + s)
+            x0 = -0.5 * (nx - 1) * (v + sx)
+            y0 = -0.5 * (ny - 1) * (v + sy)
             for ix in range(nx):
-                cx = x0 + ix * (v + s)
+                cx = x0 + ix * (v + sx)
                 for iy in range(ny):
-                    cy = y0 + iy * (v + s)
+                    cy = y0 + iy * (v + sy)
                     scut.insert(pya.DBox(cx - 0.5*v, cy - 0.5*v, cx + 0.5*v, cy + 0.5*v))
