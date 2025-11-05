@@ -223,7 +223,7 @@ pwell = pwell_allowed.not(nwell_drw).not(digisub_gap)
 # nBulay
 nbulay_tables = %w[main nbulay nwell activfiller schottkydiode]
 if nbulay_tables.include?(TABLE_NAME)
-  nbulay_gen_sized = nwell_drw.sized(-1.5.um).sized(0.5.um)
+  nbulay_gen_sized = nwell_drw.sized(-1.495.um).sized(0.495.um)
   nbuLay_gen = nbulay_gen_sized.not(nbulay_block.join(res_drw))
   nbuLay_gen_nbulay = nbuLay_gen.join(nbulay_drw)
 end
