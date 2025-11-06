@@ -23,7 +23,8 @@ Usage:
     [--run_dir=<run_dir_path>] [--topcell=<topcell_name>] [--run_mode=<run_mode>]
     [--no_net_names] [--spice_comments] [--net_only] [--no_simplify]
     [--no_series_res] [--no_parallel_res] [--combine_devices] [--top_lvl_pins]
-    [--purge] [--purge_nets] [--verbose]
+    [--purge] [--purge_nets] [--verbose] [--implicit_nets=<nets>]
+    [--allow_unmatched_ports]
 
 Options:
     --help -h                           Displays this help message.
@@ -43,6 +44,10 @@ Options:
     --purge                             Removes unused nets from both layout and schematic netlists.
     --purge_nets                        Purges floating nets from both layout and schematic netlists.
     --verbose                           Enables detailed rule execution logs for debugging purposes.
+    --allow_unmatched_ports             Allows unmatched or improperly labeled ports(pins) in the top-level circuit.
+    --implicit_nets=<nets>              Specifies a comma-separated list of net names or patterns for implicit
+                                        connections (e.g., `"VDD,VSS"`), matching is case-sensitive
+                                        (e.g., `"VDD"` ≠ `"vdd"`). Use `"*"` to apply to all labeled nets.
 """
 
 from docopt import docopt
@@ -73,8 +78,8 @@ def check_klayout_version():
         logging.error("Was not able to get klayout version properly.")
         exit(1)
     elif len(klayout_v_list) >= 2 or len(klayout_v_list) <= 3:
-        if klayout_v_list[1] < 29:
-            logging.error("Prerequisites at a minimum: KLayout 0.29.0")
+        if klayout_v_list[1] < 30 or (klayout_v_list[1] == 30 and klayout_v_list[2] < 2):
+            logging.error("Prerequisites at a minimum: KLayout 0.30.2")
             logging.error(
                 "Using this klayout version has not been assessed. Limits are unknown"
             )
@@ -208,9 +213,11 @@ def generate_klayout_switches(arguments, layout_path, netlist_path):
         "purge": "true" if arguments.get("--purge") else "false",
         "purge_nets": "true" if arguments.get("--purge_nets") else "false",
         "verbose": "true" if arguments.get("--verbose") else "false",
+        "implicit_nets": f'"{arguments["--implicit_nets"]}"' if arguments.get("--implicit_nets") else '""',
         "topcell": get_run_top_cell_name(arguments, layout_path),
         "input": os.path.abspath(layout_path),
-        "schematic": os.path.abspath(netlist_path)
+        "schematic": os.path.abspath(netlist_path),
+        "allow_unmatched_ports": "true" if arguments.get("--allow_unmatched_ports") else "false",
     }
 
     return switches
@@ -237,7 +244,6 @@ def check_lvs_results(results_db_files: list):
     results_db_files : list
         A list of strings that represent paths to results databases of all the LVS runs.
     """
-
     if len(results_db_files) < 1:
         logging.error("Klayout did not generate any db results. Please check run logs")
         exit(1)

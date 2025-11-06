@@ -1,0 +1,11 @@
+.SUBCKT rfcmim_advanced PAR_NET1 PAR_NET2 SER_NET1 SER_NET2 SUB
+
+* Two rfcmim capacitors connected in parallel.
+C_par_1 PAR_NET1 PAR_NET2 SUB rfcmim w=7u l=7u wfeed=3u
+C_par_2 PAR_NET1 PAR_NET2 SUB rfcmim w=7u l=7u wfeed=3u
+
+* Two rfcmim capacitors connected in series.
+C_ser_1 SER_NET1 ser_internal_mid SUB rfcmim w=7u l=7u wfeed=3u
+C_ser_2 ser_internal_mid SER_NET2 SUB rfcmim w=7u l=7u wfeed=3u
+
+.ENDS

@@ -1,0 +1,19 @@
+.SUBCKT cap_cmim_advanced P1_NET1 P1_NET2 S1_c0 S1_c1 P2_VDD P2_GND S2_NET1 S2_NET2
+
+* Two parallel caps of one size, and two of another.
+C_par1_1 P1_NET1 P1_NET2 cap_cmim w=6.99e-6 l=6.99e-6 m=1
+C_par1_2 P1_NET1 P1_NET2 cap_cmim w=6.99e-6 l=6.99e-6 m=1
+C_par1_3 P1_NET1 P1_NET2 cap_cmim w=8.19e-6 l=8.19e-6 m=1
+C_par1_4 P1_NET1 P1_NET2 cap_cmim w=8.19e-6 l=8.19e-6 m=1
+
+* Two capacitors in series.
+C_ser2_1 S1_c0 S1_internal_net1 cap_cmim w=7.0e-6 l=7.0e-6
+C_ser2_2 S1_c1 S1_internal_net1 cap_cmim w=7.0e-6 l=7.0e-6
+
+* Four capacitors in series.
+C_ser4_1 S2_NET1 S2_internal_n1 cap_cmim w=6.99e-6 l=6.99e-6 m=1
+C_ser4_2 S2_internal_n2 S2_internal_n1 cap_cmim w=6.99e-6 l=6.99e-6 m=1
+C_ser4_3 S2_internal_n2 S2_internal_n3 cap_cmim w=6.99e-6 l=6.99e-6 m=1
+C_ser4_4 S2_NET2 S2_internal_n3 cap_cmim w=6.99e-6 l=6.99e-6 m=1
+
+.ENDS

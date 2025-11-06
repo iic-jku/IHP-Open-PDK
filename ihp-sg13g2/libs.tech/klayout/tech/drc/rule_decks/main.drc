@@ -81,12 +81,12 @@ logger.info('Loading database to memory is complete.')
 
 if $report
   logger.info("IHP-SG13G2 Klayout DRC runset output at: #{$report}")
-  report('DRC Run Report at', $report)
+  report('Main DRC Run Report at', $report)
 else
   layout_dir = Pathname.new(RBA::CellView.active.filename).parent.realpath
   report_path = layout_dir.join('sg13g2_drc_main.lyrdb').to_s
   logger.info("IHP-SG13G2 Klayout DRC runset output at default location: #{report_path}")
-  report('DRC Run Report at', report_path)
+  report('Main DRC Run Report at', report_path)
 end
 
 #================================================
@@ -223,7 +223,7 @@ pwell = pwell_allowed.not(nwell_drw).not(digisub_gap)
 # nBulay
 nbulay_tables = %w[main nbulay nwell activfiller schottkydiode]
 if nbulay_tables.include?(TABLE_NAME)
-  nbulay_gen_sized = nwell_drw.sized(-1.5.um).sized(0.5.um)
+  nbulay_gen_sized = nwell_drw.sized(-1.495.um).sized(0.495.um)
   nbuLay_gen = nbulay_gen_sized.not(nbulay_block.join(res_drw))
   nbuLay_gen_nbulay = nbuLay_gen.join(nbulay_drw)
 end
