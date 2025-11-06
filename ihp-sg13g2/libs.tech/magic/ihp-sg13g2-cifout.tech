@@ -373,7 +373,7 @@ style gdsii
  layer THKOX schottkyarea,varactorarea
 	grow 100
 	or alldiffhv,var,pvar
-        bloat-or alldiffhv,var,pvar * 185 alldifflv 0
+        bloat-or alldiffhv,var,pvar * 270 alldifflv 0
 	grow-min 860
 	bridge 860 860
 	grow	430
