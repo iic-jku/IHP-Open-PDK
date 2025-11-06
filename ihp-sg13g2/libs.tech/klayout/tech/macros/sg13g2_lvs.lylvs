@@ -80,6 +80,7 @@ def set_default_options(yaml_file_path)
     'purge' => false,
     'purge_nets' => false,
     'verbose' => false,
+    'implicit_nets' => '',
   }
   default_options
 end
@@ -154,6 +155,7 @@ $allow_unmatched_ports = options['allow_unmatched_ports'].to_s
 $purge = options['purge'].to_s
 $purge_nets = options['purge_nets'].to_s
 $verbose = options['verbose'].to_s
+$implicit_nets = options['implicit_nets'].to_s
 
 ## include lvs run file
 #%include ../lvs/sg13g2.lvs

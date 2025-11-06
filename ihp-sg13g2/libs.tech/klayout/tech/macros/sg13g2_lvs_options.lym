@@ -125,7 +125,7 @@
       'top_cell' => '',
       'run_mode' => 'flat',
       'no_net_names' => false,
-      'spice_comments' => false,
+       'spice_comments' => false,
       'net_only' => false,
       'no_simplify' => false,
       'no_series_res' => false,
@@ -134,6 +134,7 @@
       'top_lvl_pins' => false,
       'purge' => false,
       'purge_nets' => false,
+      'implicit_nets' => '',
       'verbose' => false,
     }
     save_options(yaml_file_path, default_options)
@@ -189,6 +190,7 @@
     layout.addRow('', create_check_box('Purge', options['purge']))
     layout.addRow('', create_check_box('Purge Nets', options['purge_nets']))
     layout.addRow('', create_check_box('Verbose', options['verbose']))
+    layout.addRow('Implicit Nets:', create_line_edit(options['implicit_nets']))
 
     layout.addRow('', create_buttons(dialog, yaml_file_path))
 
@@ -309,6 +311,7 @@
     options['purge'] = dialog.layout.itemAt(15).widget.checked
     options['purge_nets'] = dialog.layout.itemAt(16).widget.checked
     options['verbose'] = dialog.layout.itemAt(17).widget.checked
+    options['implicit_nets'] = dialog.layout.itemAt(18).widget.text 
   end
 
   # Save options to a YAML file

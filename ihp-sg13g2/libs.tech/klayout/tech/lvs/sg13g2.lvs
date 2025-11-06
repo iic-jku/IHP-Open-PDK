@@ -179,6 +179,19 @@ end
 
 # === Tech Switches ===
 
+#==================================================
+# --------------- IMPLICIT CONNECTIONS -------------
+#==================================================
+
+# "connect_implicit" creates a virtual, combined physical net that matches the logical net.
+if defined?($implicit_nets) && !$implicit_nets.to_s.empty?
+  nets_to_connect = $implicit_nets.to_s.split(',').map(&:strip)
+  logger.info("Applying implicit connections (case-sensitive, pattern supported) for nets: #{nets_to_connect.join(', ')}")
+  nets_to_connect.each do |net_pattern|
+    connect_implicit(net_pattern)
+  end
+end
+
 #================================================
 # --------------- CUSTOM CLASSES ----------------
 #================================================

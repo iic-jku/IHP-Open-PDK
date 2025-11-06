@@ -11,7 +11,6 @@ Explains how to use the SG13G2 LVS rule decks.
   - [Installation](#installation)
   - [Usage](#usage)
     - [CLI](#cli)
-      - [LVS Outputs](#lvs-outputs)
     - [GUI](#gui)
 
 
@@ -59,7 +58,7 @@ The `run_lvs.py` script takes your gds and netlist files to run LVS rule decks w
     [--run_dir=<run_dir_path>] [--topcell=<topcell_name>] [--run_mode=<run_mode>]
     [--no_net_names] [--spice_comments] [--net_only] [--no_simplify]
     [--no_series_res] [--no_parallel_res] [--combine_devices] [--top_lvl_pins]
-    [--purge] [--purge_nets] [--verbose]
+    [--purge] [--purge_nets] [--verbose] [--implicit_nets=<nets>]
 ```
 
 **Options:**
@@ -98,6 +97,7 @@ The `run_lvs.py` script takes your gds and netlist files to run LVS rule decks w
 
 - `--verbose`                         Enables detailed rule execution logs for debugging purposes.
 
+- `--implicit_nets=<nets>`            Specifies a comma-separated list of net names or patterns for implicit connections (e.g., `"VDD,VSS"`), matching is case-sensitive (e.g., `"VDD"` ≠ `"vdd"`). Use `"*"` to apply to all labeled nets.
 
 ---
 **NOTE**
@@ -106,6 +106,9 @@ The `run_lvs.py` script takes your gds and netlist files to run LVS rule decks w
 <br/>
 
 * When you use the `no_simplify` option to disable simplification, you can then use the `make_top_level_pins`, `purge`, `combine_devices`, and `purge_nets` options individually to fine-tune the behavior according to your needs.
+<br/>
+
+* Implicit connections are useful for bottom-up verification of blocks where some nets (e.g., power nets) are not fully connected within the block itself but will be connected at a higher level. This feature should be disabled for final top-level verification to detect actual net opens.
 <br/>
 
 * Series resistors with identical parameters (except length) will combine into one resistor with the total length.
@@ -120,8 +123,7 @@ The `run_lvs.py` script takes your gds and netlist files to run LVS rule decks w
 **Example:**
 
 ```bash
-    python3 run_lvs.py --layout=testing/testcases/unit/mos_devices/layout/sg13_lv_nmos.gds --netlist=testing/testcases/unit/mos_devices/netlist/sg13_lv_nmos.cdl --run_dir=test_nmos
-```
+    python3 run_lvs.py --layout=testing/testcases/unit/mos_devices/layout/sg13_lv_nmos.gds --netlist=testing/testcases/unit/mos_devices/netlist/sg13_lv_nmos.cdl --run_dir=test_nmos --implicit_nets="VDD,VSS"
 
 #### LVS Outputs
 
