@@ -19,205 +19,26 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from functools import cached_property
+import json
 import math
 from typing import *
 
 import pya
-
-
-NX = int
-NY = int
-SpaceLambda = Callable[[NX, NY], Tuple[float, float]]
-
-
-@dataclass
-class ViaExtraInfo:
-    enc_bottom: float
-    enc_top: float
-    width: float
-    space_lambda: SpaceLambda
-
-
-def via(name: str, 
-        description: str, 
-        bottom: pya.LayerInfo, 
-        cut: pya.LayerInfo, 
-        top: pya.LayerInfo,
-        bottom_grid: float,
-        top_grid: float,
-        wbmin: float,
-        hbmin: float,
-        wtmin: float,
-        htmin: float,
-        extra_info: ViaExtraInfo) -> ViaType:
-    vt = pya.ViaType(name, description)
-    vt.bottom = bottom
-    vt.cut = cut
-    vt.top = top
-    vt.bottom_grid = bottom_grid
-    vt.top_grid = top_grid
-    vt.wbmin = wbmin
-    vt.hbmin = hbmin
-    vt.wtmin = wtmin
-    vt.htmin = htmin
-    vt.extra_info = extra_info
-    return vt
-
-
-@dataclass
-class PDKInfo:
-    layers: List[pya.LayerInfo]
-    vias: List[pya.ViaType]
-
-    @classmethod
-    def instance(cls) -> PDKInfo:
-        if not hasattr(cls, '_instance'):
-            layers = [
-                pya.LayerInfo(1, 0, 'Activ'),
-                pya.LayerInfo(5, 0, 'GatPoly'),
-                pya.LayerInfo(6, 0, 'Cont'),
-                pya.LayerInfo(8, 0, 'Metal1'),
-                pya.LayerInfo(19, 0, 'Via1'),
-                pya.LayerInfo(10, 0, 'Metal2'),
-                pya.LayerInfo(29, 0, 'Via2'),
-                pya.LayerInfo(30, 0, 'Metal3'),
-                pya.LayerInfo(49, 0, 'Via3'),
-                pya.LayerInfo(50, 0, 'Metal4'),
-                pya.LayerInfo(66, 0, 'Via4'),
-                pya.LayerInfo(67, 0, 'Metal5'),
-                pya.LayerInfo(125, 0, 'TopVia1'),
-                pya.LayerInfo(126, 0, 'TopMetal1'),
-
-                pya.LayerInfo(133, 0, 'TopVia2'),
-                pya.LayerInfo(134, 0, 'TopMetal2'),
-            ]
-            ld: Dict[str, pya.LayerInfo] = {l.name: l for l in layers}
-        
-            vias = [
-                via(name='SG13G2_CONT_GATPOLY_M1', description='Cont (GatPoly→Metal1)', 
-                    bottom=ld['GatPoly'], cut=ld['Cont'], top=ld['Metal1'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.07, enc_top=0.05, width=0.16, 
-                        space_lambda=lambda nx, ny: (0.20, 0.18) if nx > 4 and ny > 4 else (0.18, 0.18)
-                    )),
-                via(name='SG13G2_CONT_ACTIV_M1', description='Cont (Activ→Metal1)', 
-                    bottom=ld['Activ'], cut=ld['Cont'], top=ld['Metal1'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.07, enc_top=0.05, width=0.16, 
-                        space_lambda=lambda nx, ny: (0.20, 0.18) if nx > 4 and ny > 4 else (0.18, 0.18)
-                    )),
-                via(name='SG13G2_VIA_M1_M2', description='Via1 (Metal1→Metal2)', 
-                    bottom=ld['Metal1'], cut=ld['Via1'], top=ld['Metal2'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
-                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
-                    )),
-                via(name='SG13G2_VIA_M2_M3', description='Via2 (Metal2→Metal3)', 
-                    bottom=ld['Metal2'], cut=ld['Via2'], top=ld['Metal3'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
-                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
-                    )),
-                via(name='SG13G2_VIA_M3_M4', description='Via3 (Metal3→Metal4)', 
-                    bottom=ld['Metal3'], cut=ld['Via3'], top=ld['Metal4'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
-                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
-                    )),
-                via(name='SG13G2_VIA_M4_M5', description='Via4 (Metal4→Metal5)', 
-                    bottom=ld['Metal4'], cut=ld['Via4'], top=ld['Metal5'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.05, enc_top=0.05, width=0.19, 
-                        space_lambda=lambda nx, ny: (0.29, 0.22) if nx > 3 and ny > 3 else (0.22, 0.22)
-                    )),
-                via(name='SG13G2_VIA_M5_TM1', description='TopVia1 (Metal5→TopMetal1)', 
-                    bottom=ld['Metal5'], cut=ld['TopVia1'], top=ld['TopMetal1'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=0.2, hbmin=0.2, wtmin=1.64, htmin=1.64,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.10, enc_top=0.42, width=0.42, 
-                        space_lambda=lambda nx, ny: (0.42, 0.42)
-                    )),
-                via(name='SG13G2_VIA_TM1_TM2', description='TopVia2 (TopMetal1→TopMetal2)', 
-                    bottom=ld['TopMetal1'], cut=ld['TopVia2'], top=ld['TopMetal2'], 
-                    bottom_grid=0.005, top_grid=0.005, wbmin=1.64, hbmin=1.64, wtmin=2.0, htmin=2.0,
-                    extra_info=ViaExtraInfo(
-                        enc_bottom=0.50, enc_top=0.50, width=0.90, 
-                        space_lambda=lambda nx, ny: (1.06, 1.06)
-                    )),
-            ]
-            
-            cls._instance = PDKInfo(layers=layers, vias=vias)
-        return cls._instance
-    
-    def layer_by_name(self, name: str) -> pya.LayerInfo:
-        return [l for l in self.layers if l.name == name][0]
-
-    def via_by_name(self, name: str) -> pya.ViaType:
-        return [v for v in self.vias if v.name == name][0]
-
-    @cached_property
-    def via_layers(self) -> Set[pya.LayerInfo]:
-        return {v.cut for v in self.vias}
-
-    @cached_property
-    def non_via_layers(self) -> List[pya.LayerInfo]:
-        return [l for l in self.layers if not l in self.via_layers]
-    
-    @cached_property
-    def layer_choices(self) -> List[Tuple[str, pya.LayerInfo]]:
-        return [(l.name, l) for l in self.non_via_layers]
-    
-    @cached_property
-    def via_choices(self) -> List[Tuple[str, str]]:
-        return [(v.description, v.name) for v in self.vias]
-    
-    def num_stack_steps(self, bot: pya.LayerInfo, top: pya.LayerInfo) -> int:
-        bi = self.layers.index(bot)
-        ti = self.layers.index(top)
-        return ti - bi
-
-    def get_vias(self, bottom: pya.LayerInfo, top: pya.LayerInfo) -> List[pya.ViaType]:
-        bottom_via_found = False
-        already_added_cut_layers: Set[pya.LayerInf] = set()
-        vias = []
-        for via in self.vias:
-            if not bottom_via_found:
-                if via.bottom == bottom:
-                    vias.append(via)
-                    already_added_cut_layers.add(via.cut)
-                    bottom_via_found = True
-                    
-            if bottom_via_found:
-                if via.cut not in already_added_cut_layers:
-                    vias.append(via)
-                
-                if via.top == top:
-                    break
-
-        return vias
+from .sg13_klayout_tech_info import (
+    KTechInfo, 
+    KViaInfo, 
+    KLayerInfo,
+)
 
 
 class ViaPCell(pya.PCellDeclarationHelper):
     def __init__(self):
         super().__init__()
 
-        self.pdk_info = PDKInfo.instance()
+        self.tech_info = KTechInfo.instance()
 
         # Endpoints
-        self.param("via", self.TypeList, "Via", choices=self.pdk_info.via_choices, default='SG13G2_VIA_M1_M2')
-        
-        ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
-        #
-        # self.param("bottom_layer", self.TypeLayer, "Bottom Layer", 
-        #           choices=self.pdk_info.layer_choices, default=self.pdk_info.layer_by_name('Metal1'))
-        # self.param("top_layer",   self.TypeLayer, "Top Layer", 
-        #           choices=self.pdk_info.layer_choices, default=self.pdk_info.layer_by_name('Metal2'))
+        self.param("via", self.TypeList, "Via", choices=self.tech_info.via_choices, default='SG13G2_VIA_M1_M2')
         
 	 # Optional array override
         self.param("nx", self.TypeInt, "nx", default=0)
@@ -243,44 +64,15 @@ class ViaPCell(pya.PCellDeclarationHelper):
     
     # Wire tool support
     def via_types(self): 
-        return self.pdk_info.vias
+        return self.tech_info.klayout_via_types
         
     def display_text_impl(self):
         ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
-        #
-        # return f"SG13G2_ViaStack({self.bottom_layer.name}->{self.top_layer.name})"
         return f"{self.via}"
 
     def coerce_parameters_impl(self):
         ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
         return
-                      
-        # print(f"ViaPCell.coerce_parameters_impl: ", end='')
-        # self.dump_params()
-        
-        bl_idx = self.pdk_info.layers.index(self.bottom_layer)
-        tl_idx = self.pdk_info.layers.index(self.top_layer)
-        
-        if bl_idx > tl_idx:  # swap layers if the order is wrong
-            tmp = self.bottom_layer
-            self.bottom_layer = self.top_layer
-            self.top_layer = tmp
-
-        error_found = False
-
-        if not error_found and bl_idx == tl_idx:
-            error_found = True
-        
-        if not error_found:
-            match (self.bottom_layer.name, self.top_layer.name):
-                case ('GatPoly', 'Activ') | ('Activ', 'GatPoly'):
-                    error_found = True
-                case _:
-                    pass
-        
-        if error_found:
-            self.bottom_layer = self.pdk_info.layer_by_name('Metal1')
-            self.top_layer = self.pdk_info.layer_by_name('Metal2')
     
     def can_create_from_shape_impl(self):
         return False
@@ -292,58 +84,30 @@ class ViaPCell(pya.PCellDeclarationHelper):
         return pya.Trans()
 
     # Helpers
-    def _min_dim_after_enc(self, a: float, b: float, da: float, db: float) -> float:
-        if a < 1e-10 and b < 1e-10: return 0.0
-        if a < 1e-10: return b - 2.0 * max(da, db)
-        if b < 1e-10: return a - 2.0 * max(da, db)
-        return min(a - 2.0 * da, b - 2.0 * db)
-
-    def _compute_nxy(self, vias: List[pya.ViaType]) -> (int, int):
-        enc_b = vias[0].extra_info.enc_bottom
-        enc_t = vias[-1].extra_info.enc_top
-        w_eff = self._min_dim_after_enc(self.w_bottom, self.w_top, enc_b, enc_t)
-        h_eff = self._min_dim_after_enc(self.h_bottom, self.h_top, enc_b, enc_t)
-        x_pitch = float('inf')
-        y_pitch = float('inf')
-        vsize = float('inf')
-        for v in vias:
-            x_space, y_space = v.extra_info.space_lambda(max(1, self.nx), max(1, self.ny))
-            x_pitch = min(x_pitch, v.extra_info.width + x_space)
-            y_pitch = min(y_pitch, v.extra_info.width + y_space)
-            vsize = min(vsize, v.extra_info.width)
-        nx = self.nx if self.nx > 0 else (max(1, int(math.floor((w_eff + (x_pitch - vsize)) / x_pitch + 1e-10))) if w_eff > 0 else 1)
-        ny = self.ny if self.ny > 0 else (max(1, int(math.floor((h_eff + (y_pitch - vsize)) / y_pitch + 1e-10))) if h_eff > 0 else 1)
-        return nx, ny
-    
     def _insert_dbox_centered(self, shapes: pya.Shapes, w: float, h: float):
         shapes.insert(pya.DBox(-0.5*w, -0.5*h, 0.5*w, 0.5*h))
     
     def produce_impl(self):
-        ## FIXME: for now, KLayout does not support via stacks yet, when using the Path tool with 'o'
-        # vias = self.pdk_info.get_vias(self.bottom_layer, self.top_layer)
-        vias = [self.pdk_info.via_by_name(self.via)]
-        
-        if not vias: 
-            return
+        vias = [self.tech_info.via_by_name(self.via)]
 
-        nx, ny = self._compute_nxy(vias)
+        nx, ny = self.nx, self.ny
         
         for idx, via in enumerate(vias):
-            bottom_ly = self.layout.layer(via.bottom)
-            top_ly    = self.layout.layer(via.top)
-            cut_ly    = self.layout.layer(via.cut)
-
-            v = via.extra_info.width
-            sx, sy = via.extra_info.space_lambda(nx, ny)
-            enc_bot = via.extra_info.enc_bottom
-            enc_top = via.extra_info.enc_top
+            bottom_ly = self.layout.layer(KLayerInfo(via.bottom).klayout_layer_info)
+            top_ly    = self.layout.layer(KLayerInfo(via.top).klayout_layer_info)
+            cut_ly    = self.layout.layer(KLayerInfo(via.cut).klayout_layer_info)
+            
+            v = via.width
+            sx, sy = via.space_lambda(nx, ny)
+            enc_bot_x, enc_bot_y = via.enc_bottom_for_nx_ny(nx, ny)
+            enc_top_x, enc_top_y = via.enc_top_for_nx_ny(nx, ny)
             wcut = nx * v + (nx - 1) * sx
             hcut = ny * v + (ny - 1) * sy
-
-            wbot = max(via.wbmin, self.w_bottom if idx == 0 else 0.0,           2.0*enc_bot + wcut)
-            hbot = max(via.hbmin, self.h_bottom if idx == 0 else 0.0,           2.0*enc_bot + hcut)
-            wtop = max(via.wtmin, self.w_top    if idx == len(vias)-1 else 0.0, 2.0*enc_top + wcut)
-            htop = max(via.htmin, self.h_top    if idx == len(vias)-1 else 0.0, 2.0*enc_top + hcut)
+            
+            wbot = max(via.wbmin, self.w_bottom if idx == 0 else 0.0,           2.0*enc_bot_x + wcut)
+            hbot = max(via.hbmin, self.h_bottom if idx == 0 else 0.0,           2.0*enc_bot_y + hcut)
+            wtop = max(via.wtmin, self.w_top    if idx == len(vias)-1 else 0.0, 2.0*enc_top_x + wcut)
+            htop = max(via.htmin, self.h_top    if idx == len(vias)-1 else 0.0, 2.0*enc_top_y + hcut)
 
             self._insert_dbox_centered(self.cell.shapes(bottom_ly), wbot, hbot)
             self._insert_dbox_centered(self.cell.shapes(top_ly),    wtop, htop)
