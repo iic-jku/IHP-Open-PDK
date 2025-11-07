@@ -76,7 +76,7 @@ def add_via_testcases(layout: pya.Layout,
     from sg13g2_native_pcell_lib.via_pcell import PDKInfo
     via_names = [via.name for via in PDKInfo.instance().vias]
     for via in via_names:
-        for nx, ny in ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5)):
+        for nx, ny in ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (1, 2), (4, 2), (5, 2), (1, 4), (2, 4), (2, 5)):
             inst = add_cell_and_instance(
                 layout=layout, 
                 pcell_name='Via',
@@ -85,7 +85,7 @@ def add_via_testcases(layout: pya.Layout,
                 position=pya.DVector(x_offset, y_offset)                
             )
             bbox = inst.bbox(layout)
-            x_offset = bbox.right + bbox.width() / 2 + 3.0
+            x_offset = bbox.right + bbox.width() / 2 + 5.0
             max_y = max(max_y, bbox.top + bbox.height() / 2 + 4)
         y_offset = max_y
         x_offset = 0.0
