@@ -89,12 +89,14 @@ class via_stack(DloGen):
         v1_size = techparams['V1_a']
         v1_sep1 = techparams['V1_b']
         v1_sep2 = techparams['V1_b1']
-        v1_enc = techparams['V1_c1']
+        v1_enc = techparams['V1_c']
+        v1_endcap_enc = techparams['V1_c1']
 
         vn_size = techparams['Vn_a']
         vn_sep1 = techparams['Vn_b']
         vn_sep2 = techparams['Vn_b1']
-        vn_enc = techparams['Vn_c1']
+        vn_enc = techparams['Vn_c']
+        vn_endcap_enc = techparams['Vn_c1']
 
         Topvia1_size = techparams['TV1_a']
         TopVia1_sep = techparams['TV1_b']
@@ -151,7 +153,7 @@ class via_stack(DloGen):
             via_layer, next_layer = via_and_next_layer.get(layer, (None, None))
             
             if layer == t_layer:
-                dbCreateRect(self, layer, Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2 + via_enc, w_y/2 + via_enc))
+                dbCreateRect(self, layer, Box(-via_enc_x-w_x/2, -via_enc_y-w_y/2, w_x/2 + via_enc_x, w_y/2 + via_enc_y))
                 break
             
             #pre-processing
@@ -161,7 +163,8 @@ class via_stack(DloGen):
                 via_size = cnt_size
                 via_sep_x = cnt_sep2 if (columns>4 and rows>4) else cnt_sep1
                 via_sep_y = cnt_sep1
-                via_enc = cnt_activ_enc
+                via_enc_x = cnt_activ_enc
+                via_enc_y = cnt_activ_enc
                 w_x = (columns * via_size + (columns - 1) * via_sep_x)
                 w_y = (rows * via_size + (rows - 1) * via_sep_y)
             elif layer == 'GatPoly':
@@ -170,7 +173,8 @@ class via_stack(DloGen):
                 via_size = cnt_size
                 via_sep_x = cnt_sep2 if (columns>4 and rows>4) else cnt_sep1
                 via_sep_y = cnt_sep1
-                via_enc = cnt_gatpoly_enc
+                via_enc_x = cnt_gatpoly_enc
+                via_enc_y = cnt_gatpoly_enc
                 w_x = (columns * via_size + (columns - 1) * via_sep_x)
                 w_y = (rows * via_size + (rows - 1) * via_sep_y)
             elif layer == 'Metal1':
@@ -179,14 +183,16 @@ class via_stack(DloGen):
                 via_size = v1_size
                 via_sep_x = v1_sep2 if (columns>3 and rows>3) else v1_sep1
                 via_sep_y = v1_sep1
-                via_enc = v1_enc
+                via_enc_x = v1_endcap_enc
+                via_enc_y = v1_enc
                 w_x = (columns * via_size + (columns - 1) * via_sep_x)
                 w_y = (rows * via_size + (rows - 1) * via_sep_y)
             elif layer == 'Metal5':
                 via_size = Topvia1_size
                 via_sep_x = TopVia1_sep
                 via_sep_y = TopVia1_sep
-                via_enc = Topvia1_enc_met5
+                via_enc_x = Topvia1_enc_met5
+                via_enc_y = Topvia1_enc_met5
                 columns = vt1_columns
                 rows = vt1_rows
                 w_x = (columns * via_size + (columns - 1) * via_sep_x)
@@ -196,41 +202,44 @@ class via_stack(DloGen):
                 via_size = Topvia2_size
                 via_sep_x = TopVia2_sep
                 via_sep_y = TopVia2_sep
-                via_enc = Topvia2_enc_top1
+                via_enc_x = Topvia2_enc_top2
+                via_enc_y = Topvia2_enc_top2
                 columns = vt2_columns
                 rows = vt2_rows
                 w_x = (columns * via_size + (columns - 1) * via_sep_x)
                 w_y = (rows * via_size + (rows - 1) * via_sep_y)
-                via_enc = Topvia2_enc_top2
             elif layer == 'TopMetal2':
                 via_size = Topvia2_size
                 via_sep_x = TopVia2_sep
                 via_sep_y = TopVia2_sep
-                via_enc = Topvia2_enc_top1
+                via_enc_x = Topvia2_enc_top2
+                via_enc_y = Topvia2_enc_top2
                 columns = vt2_columns
                 rows = vt2_rows
                 w_x = (columns * via_size + (columns - 1) * via_sep_x)
                 w_y = (rows * via_size + (rows - 1) * via_sep_y)
-                via_enc = Topvia2_enc_top2
             else:
                 columns = vn_columns
                 rows = vn_rows
                 via_size = vn_size
                 via_sep_x = vn_sep2 if (columns>3 and rows>3) else vn_sep1
                 via_sep_y = vn_sep1
-                via_enc = vn_enc
+                via_enc_x = vn_endcap_enc
+                via_enc_y = vn_enc
                 w_x = (columns * via_size + (columns - 1) * via_sep_x)
                 w_y = (rows * via_size + (rows - 1) * via_sep_y)
 
             #metal draw
             if layer == 'TopMetal1':
                 if columns * via_size + (columns - 1) * 2 * via_sep_x < TopMetal1_min:
-                    via_enc = (TopMetal1_min - Topvia1_size)/2
+                    via_enc_x = (TopMetal1_min - Topvia1_size)/2
+                    via_enc_y = via_enc_x
             elif layer == 'TopMetal2':
                 if columns * via_size + (columns - 1) * 2 * via_sep_x < TopMetal2_min:
-                    via_enc = (TopMetal2_min - Topvia2_size) / 2
+                    via_enc_x = (TopMetal2_min - Topvia2_size) / 2
+                    via_enc_y = via_enc_x
 
-            dbCreateRect(self, layer, Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2 + via_enc, w_y/2 + via_enc))
+            dbCreateRect(self, layer, Box(-via_enc_x-w_x/2, -via_enc_y-w_y/2, w_x/2 + via_enc_x, w_y/2 + via_enc_y))
 
             #via draw
             for i in range(columns):
