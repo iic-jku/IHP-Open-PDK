@@ -150,6 +150,10 @@ class via_stack(DloGen):
         while True:
             via_layer, next_layer = via_and_next_layer.get(layer, (None, None))
             
+            if layer == t_layer:
+                dbCreateRect(self, layer, Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2 + via_enc, w_y/2 + via_enc))
+                break
+            
             #pre-processing
             if layer == 'Activ':
                 columns = vn_columns
@@ -227,9 +231,6 @@ class via_stack(DloGen):
                     via_enc = (TopMetal2_min - Topvia2_size) / 2
 
             dbCreateRect(self, layer, Box(-via_enc-w_x/2, -via_enc-w_y/2, w_x/2 + via_enc, w_y/2 + via_enc))
-
-            if layer == t_layer:
-                break
 
             #via draw
             for i in range(columns):
