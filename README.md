@@ -27,6 +27,12 @@ release was derived have been used to create many designs that have been
 successfully manufactured in significant quantities, the open source PDK
 is not intended to be used for production at this moment.
 
+# Documentation
+
+Comprehensive documentation for the IHP Open Source PDK is available on [ReadTheDocs](https://ihp-open-pdk.readthedocs.io/en/latest/).
+
+The documentation provides detailed information on PDK installation, setup for supported EDA tools, device libraries, layout rules, process specifications and design flow examples. It is the recommended starting point for users who want to explore the PDK structure, simulation models, layout design environments, etc.
+
 # SG13G2 Process Node
 
 SG13G2 is a high performance BiCMOS technology with a 0.13 μm CMOS process. It contains bipolar
