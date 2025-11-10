@@ -31,7 +31,7 @@ ViaName = str
 SpaceLambda = Callable[[NX, NY], Tuple[float, float]]
 
 
-@dataclass
+@dataclass(frozen=True)
 class LayerInfo:
     gds_layer: int
     gds_datatype: int
