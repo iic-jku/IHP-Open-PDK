@@ -23,6 +23,8 @@ import json
 import os
 from typing import *
 
+from .ihp.geometry import *
+
 
 NX = int
 NY = int
@@ -69,6 +71,101 @@ class ViaInfo:
             return (self.enc_top, self.enc_endcap_top)
         else:
             return (self.enc_endcap_top, self.enc_top)
+
+
+@dataclass
+class ViaArrayInfo:
+    via: ViaInfo
+    nx: int
+    ny: int
+    
+    @cached_property
+    def enc_bottom(self) -> (float, float):
+        if self.nx < self.ny:
+            return (self.via.enc_bottom, self.via.enc_endcap_bottom)
+        else:
+            return (self.via.enc_endcap_bottom, self.via.enc_bottom)
+
+    @cached_property
+    def enc_top(self) -> (float, float):
+        if self.nx < self.ny:
+            return (self.via.enc_top, self.via.enc_endcap_top)
+        else:
+            return (self.via.enc_endcap_top, self.via.enc_top)
+
+    @cached_property
+    def space(self) -> (float, float):    
+        return self.via.space_lambda(self.nx, self.ny)
+
+    @cached_property
+    def size(self) -> (float, float):   
+        """
+        Size of the array without enclosure
+        """
+        space_x, space_y = self.space
+        array_w = (self.nx * self.via.width + (self.nx - 1) * space_x)
+        array_h = (self.ny * self.via.width + (self.ny - 1) * space_y)
+        return array_w, array_h
+    
+    def each_via_box(self) -> Iterator[Box]:
+        space_x, space_y = self.space
+        array_w, array_h = self.size
+        for i in range(self.nx):
+            x0 = i * space_x + i * self.via.width - array_w/2
+            for j in range(self.ny):
+                y0 = j * space_y + j * self.via.width - array_h/2
+                yield Box(x0, y0, x0 + self.via.width, y0 + self.via.width)
+
+    @staticmethod
+    def ensure_min_size_rules(box: Box, min_width: float, min_height: float) -> Box:
+        w = box.right - box.left
+        h = box.top - box.bottom
+
+        center_x = box.left + w/2
+        center_y = box.bottom + h/2
+
+        if w < min_width:
+            w = min_width
+        if h < min_height:
+            h = min_height
+            
+        return Box(center_x - w/2,
+                   center_y - h/2,
+                   center_x + w/2,
+                   center_y + h/2)
+    
+    def bottom_metal_box(self, via_array_below: Optional[ViaArrayInfo]) -> Box:
+        enc_bot_x, enc_bot_y = self.enc_bottom
+        
+        via_arr_w, via_arr_h = self.size
+        met_bot_w = via_arr_w + enc_bot_x*2
+        met_bot_h = via_arr_h + enc_bot_y*2
+        
+        bottom_layer_box = Box(-met_bot_w/2,
+                               -met_bot_h/2,
+                               met_bot_w/2,
+                               met_bot_h/2)
+                               
+        if via_array_below is not None:
+            previous_top_metal_box = via_array_below.top_metal_box()
+            bottom_layer_box = Box(min(bottom_layer_box.left, previous_top_metal_box.left),
+                                   min(bottom_layer_box.bottom, previous_top_metal_box.bottom),
+                                   max(bottom_layer_box.right, previous_top_metal_box.right),
+                                   max(bottom_layer_box.top, previous_top_metal_box.top))
+        bottom_layer_box = self.ensure_min_size_rules(bottom_layer_box, self.via.wbmin, self.via.hbmin)
+        return bottom_layer_box
+
+    def top_metal_box(self) -> Box:
+        enc_top_x, enc_top_y = self.enc_top
+        via_arr_w, via_arr_h = self.size
+        met_bot_w = via_arr_w + enc_top_x*2
+        met_bot_h = via_arr_h + enc_top_y*2
+        top_layer_box = Box(-met_bot_w/2,
+                            -met_bot_h/2,
+                            met_bot_w/2,
+                            met_bot_h/2)
+        top_layer_box = self.ensure_min_size_rules(top_layer_box, self.via.wtmin, self.via.htmin)
+        return top_layer_box
 
 
 @dataclass
@@ -267,3 +364,4 @@ class TechInfo:
                     break
 
         return vias
+
