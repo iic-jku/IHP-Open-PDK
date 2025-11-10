@@ -25,6 +25,9 @@ from .utility_functions import *
 
 import math
 
+from ..sg13_tech_info import *
+
+
 class via_stack(DloGen):
 
     @classmethod
@@ -60,14 +63,10 @@ class via_stack(DloGen):
         self.vt2_rows = params['vt2_rows']
 
     def genLayout(self):
-
-        b_layer = self.b_layer
-        t_layer = self.t_layer
-
         self.techparams = self.tech.getTechParams()
         self.epsilon = self.techparams['epsilon1']
         self.grid = self.tech.getGridResolution()         # needed for Dogbone
-
+        
         Cell = self.__class__.__name__
 
         textlayer = 'TEXT'
@@ -80,41 +79,16 @@ class via_stack(DloGen):
 
         epsilon = techparams['epsilon1']
 
-        cnt_size = techparams['Cnt_a']
-        cnt_sep1 = techparams['Cnt_b']
-        cnt_sep2 = techparams['Cnt_b1']
-        cnt_activ_enc = techparams['Cnt_c']
-        cnt_gatpoly_enc = techparams['Cnt_d']
-
-        v1_size = techparams['V1_a']
-        v1_sep1 = techparams['V1_b']
-        v1_sep2 = techparams['V1_b1']
-        v1_enc = techparams['V1_c']
-        v1_endcap_enc = techparams['V1_c1']
-
-        vn_size = techparams['Vn_a']
-        vn_sep1 = techparams['Vn_b']
-        vn_sep2 = techparams['Vn_b1']
-        vn_enc = techparams['Vn_c']
-        vn_endcap_enc = techparams['Vn_c1']
-
-        Topvia1_size = techparams['TV1_a']
-        TopVia1_sep = techparams['TV1_b']
-        Topvia1_enc_met5 = techparams['TV1_c']
-        Topvia1_enc_top1 = techparams['TV1_d']
-
-        Topvia2_size = techparams['TV2_a']
-        TopVia2_sep = techparams['TV2_b']
-        Topvia2_enc_top1 = techparams['TV2_c']
-        Topvia2_enc_top2 = techparams['TV2_d']
-
-        TopMetal1_min = techparams['TM1_a']
-        TopMetal2_min = techparams['TM2_a']
+        self.tech_info = TechInfo.instance()
+        
         #*************************************************************************
         #*
         #* Device Specific Design Rule Definitions
         #*
         #************************************************************************
+
+        b_layer_name = self.b_layer
+        t_layer_name = self.t_layer
 
         vn_columns = self.vn_columns
         vn_rows = self.vn_rows
@@ -123,18 +97,6 @@ class via_stack(DloGen):
         vt2_columns = self.vt2_columns
         vt2_rows = self.vt2_rows
 
-        device_layers = ['Activ', 'GatPoly']
-        via_and_next_layer = {
-            'Activ':     ('Cont',    'Metal1'),
-            'GatPoly':   ('Cont',    'Metal1'),
-            'Metal1':    ('Via1',    'Metal2'),
-            'Metal2':    ('Via2',    'Metal3'),
-            'Metal3':    ('Via3',    'Metal4'),
-            'Metal4':    ('Via4',    'Metal5'),
-            'Metal5':    ('TopVia1', 'TopMetal1'),
-            'TopMetal1': ('TopVia2', 'TopMetal2'),
-        }
-        
         #*************************************************************************
         #*
         #* Main body of code
@@ -142,114 +104,34 @@ class via_stack(DloGen):
         #************************************************************************
 
         # NOTE: device_layers are mutual exclusive
-        if b_layer in device_layers:
-            if t_layer in device_layers:
+        if b_layer_name in self.tech_info.device_layer_names:
+            if t_layer_name in self.tech_info.device_layer_names:
                 # this is not allowed, coerce top layer to Metal1
-                t_layer = 'Metal1'
+                t_layer_name = self.tech_info.first_metal_layer_name
+        
+        b_layer = self.tech_info.layer_by_name(b_layer_name)
+        t_layer = self.tech_info.layer_by_name(t_layer_name)
 
-        previous_layer = None
-        layer = b_layer
-        while True:
-            via_layer, next_layer = via_and_next_layer.get(layer, (None, None))
-            
-            if layer == t_layer:
-                dbCreateRect(self, layer, Box(-via_enc_x-w_x/2, -via_enc_y-w_y/2, w_x/2 + via_enc_x, w_y/2 + via_enc_y))
-                break
-            
-            #pre-processing
-            if layer == 'Activ':
-                columns = vn_columns
-                rows = vn_rows
-                via_size = cnt_size
-                via_sep_x = cnt_sep2 if (columns>4 and rows>4) else cnt_sep1
-                via_sep_y = cnt_sep1
-                via_enc_x = cnt_activ_enc
-                via_enc_y = cnt_activ_enc
-                w_x = (columns * via_size + (columns - 1) * via_sep_x)
-                w_y = (rows * via_size + (rows - 1) * via_sep_y)
-            elif layer == 'GatPoly':
-                columns = vn_columns
-                rows = vn_rows
-                via_size = cnt_size
-                via_sep_x = cnt_sep2 if (columns>4 and rows>4) else cnt_sep1
-                via_sep_y = cnt_sep1
-                via_enc_x = cnt_gatpoly_enc
-                via_enc_y = cnt_gatpoly_enc
-                w_x = (columns * via_size + (columns - 1) * via_sep_x)
-                w_y = (rows * via_size + (rows - 1) * via_sep_y)
-            elif layer == 'Metal1':
-                columns = vn_columns
-                rows = vn_rows
-                via_size = v1_size
-                via_sep_x = v1_sep2 if (columns>3 and rows>3) else v1_sep1
-                via_sep_y = v1_sep1
-                via_enc_x = v1_endcap_enc
-                via_enc_y = v1_enc
-                w_x = (columns * via_size + (columns - 1) * via_sep_x)
-                w_y = (rows * via_size + (rows - 1) * via_sep_y)
-            elif layer == 'Metal5':
-                via_size = Topvia1_size
-                via_sep_x = TopVia1_sep
-                via_sep_y = TopVia1_sep
-                via_enc_x = Topvia1_enc_met5
-                via_enc_y = Topvia1_enc_met5
-                columns = vt1_columns
-                rows = vt1_rows
-                w_x = (columns * via_size + (columns - 1) * via_sep_x)
-                w_y = (rows * via_size + (rows - 1) * via_sep_y)
-                via_enc = Topvia1_enc_top1
-            elif layer == 'TopMetal1':
-                via_size = Topvia2_size
-                via_sep_x = TopVia2_sep
-                via_sep_y = TopVia2_sep
-                via_enc_x = Topvia2_enc_top2
-                via_enc_y = Topvia2_enc_top2
-                columns = vt2_columns
-                rows = vt2_rows
-                w_x = (columns * via_size + (columns - 1) * via_sep_x)
-                w_y = (rows * via_size + (rows - 1) * via_sep_y)
-            elif layer == 'TopMetal2':
-                via_size = Topvia2_size
-                via_sep_x = TopVia2_sep
-                via_sep_y = TopVia2_sep
-                via_enc_x = Topvia2_enc_top2
-                via_enc_y = Topvia2_enc_top2
-                columns = vt2_columns
-                rows = vt2_rows
-                w_x = (columns * via_size + (columns - 1) * via_sep_x)
-                w_y = (rows * via_size + (rows - 1) * via_sep_y)
+        def nx_ny_for_via(via: ViaInfo) -> Tuple[int, int]:
+            if via.cut.name == 'TopVia1':
+                return self.vt1_columns, self.vt1_rows
+            elif via.cut.name == 'TopVia2':
+                return self.vt2_columns, self.vt2_rows
             else:
-                columns = vn_columns
-                rows = vn_rows
-                via_size = vn_size
-                via_sep_x = vn_sep2 if (columns>3 and rows>3) else vn_sep1
-                via_sep_y = vn_sep1
-                via_enc_x = vn_endcap_enc
-                via_enc_y = vn_enc
-                w_x = (columns * via_size + (columns - 1) * via_sep_x)
-                w_y = (rows * via_size + (rows - 1) * via_sep_y)
-
-            #metal draw
-            if layer == 'TopMetal1':
-                if columns * via_size + (columns - 1) * 2 * via_sep_x < TopMetal1_min:
-                    via_enc_x = (TopMetal1_min - Topvia1_size)/2
-                    via_enc_y = via_enc_x
-            elif layer == 'TopMetal2':
-                if columns * via_size + (columns - 1) * 2 * via_sep_x < TopMetal2_min:
-                    via_enc_x = (TopMetal2_min - Topvia2_size) / 2
-                    via_enc_y = via_enc_x
-
-            dbCreateRect(self, layer, Box(-via_enc_x-w_x/2, -via_enc_y-w_y/2, w_x/2 + via_enc_x, w_y/2 + via_enc_y))
-
-            #via draw
-            for i in range(columns):
-                x0 = i * via_sep_x + i * via_size - w_x/2
-                for j in range(rows):
-                    y0 = j * via_sep_y + j * via_size - w_y/2
-                    dbCreateRect(self, via_layer, Box(x0, y0, x0 + via_size, y0 + via_size))
-
-            if next_layer is None:
-                break
-            else:
-                previous_layer = layer
-                layer = next_layer
+                return self.vn_columns, self.vn_rows
+        
+        vias = self.tech_info.get_vias(b_layer, t_layer)
+        prev_via_array: Optional[ViaArrayInfo] = None
+        
+        for i, via in enumerate(vias):
+            nx, ny = nx_ny_for_via(via)
+            via_array = ViaArrayInfo(via, nx, ny)
+            
+            for box in via_array.each_via_box():
+                dbCreateRect(self, via.cut.name, box)
+            
+            dbCreateRect(self, via.bottom.name, via_array.bottom_metal_box(prev_via_array))
+            
+            prev_via_array = via_array
+        
+        dbCreateRect(self, prev_via_array.via.top.name, prev_via_array.top_metal_box())
