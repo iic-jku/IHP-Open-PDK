@@ -26,6 +26,8 @@ from typing import *
 
 NX = int
 NY = int
+LayerName = str
+ViaName = str
 SpaceLambda = Callable[[NX, NY], Tuple[float, float]]
 
 
@@ -108,7 +110,7 @@ class TechInfo:
             vias = [
                 ViaInfo(name='SG13G2_CONT_GATPOLY_M1', description='Cont (GatPoly→Metal1)', 
                         bottom=ld['GatPoly'], cut=ld['Cont'], top=ld['Metal1'], bottom_grid=grid, top_grid=grid, 
-                        wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                        wbmin=tp['Cnt_a'], hbmin=tp['Cnt_a'], wtmin=tp['M1_a'], htmin=tp['M1_a'],
                         enc_bottom=tp['Cnt_d'], enc_endcap_bottom=tp['Cnt_d'],
                         enc_top=tp['M1_c'], enc_endcap_top=tp['M1_c1'],
                         width=tp['Cnt_a'],
@@ -118,7 +120,7 @@ class TechInfo:
                         ),
                 ViaInfo(name='SG13G2_CONT_ACTIV_M1', description='Cont (Activ→Metal1)', 
                         bottom=ld['Activ'], cut=ld['Cont'], top=ld['Metal1'], bottom_grid=grid, top_grid=grid, 
-                        wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                        wbmin=tp['Cnt_a'], hbmin=tp['Cnt_a'], wtmin=tp['M1_a'], htmin=tp['M1_a'],
                         enc_bottom=tp['Cnt_d'], enc_endcap_bottom=tp['Cnt_d'],
                         enc_top=tp['M1_c'], enc_endcap_top=tp['M1_c1'],
                         width=tp['Cnt_a'], 
@@ -128,7 +130,7 @@ class TechInfo:
                         ),
                 ViaInfo(name='SG13G2_VIA_M1_M2', description='Via1 (Metal1→Metal2)', 
                         bottom=ld['Metal1'], cut=ld['Via1'], top=ld['Metal2'], bottom_grid=grid, top_grid=grid, 
-                        wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                        wbmin=tp['M1_a'], hbmin=tp['M1_a'], wtmin=tp['Mn_a'], htmin=tp['Mn_a'],
                         enc_bottom=tp['V1_c'], enc_endcap_bottom=tp['V1_c1'],
                         enc_top=tp['Mn_c'], enc_endcap_top=tp['Mn_c1'],
                         width=tp['V1_a'], 
@@ -138,7 +140,7 @@ class TechInfo:
                         ),
                 ViaInfo(name='SG13G2_VIA_M2_M3', description='Via2 (Metal2→Metal3)', 
                         bottom=ld['Metal2'], cut=ld['Via2'], top=ld['Metal3'], bottom_grid=grid, top_grid=grid, 
-                        wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                        wbmin=tp['Mn_a'], hbmin=tp['Mn_a'], wtmin=tp['Mn_a'], htmin=tp['Mn_a'],
                         enc_bottom=tp['Vn_c'], enc_endcap_bottom=tp['Vn_c1'],
                         enc_top=tp['Mn_c'], enc_endcap_top=tp['Mn_c1'],
                         width=tp['Vn_a'], 
@@ -148,7 +150,7 @@ class TechInfo:
                         ),
                 ViaInfo(name='SG13G2_VIA_M3_M4', description='Via3 (Metal3→Metal4)', 
                         bottom=ld['Metal3'], cut=ld['Via3'], top=ld['Metal4'], bottom_grid=grid, top_grid=grid, 
-                        wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                        wbmin=tp['Mn_a'], hbmin=tp['Mn_a'], wtmin=tp['Mn_a'], htmin=tp['Mn_a'],
                         enc_bottom=tp['Vn_c'], enc_endcap_bottom=tp['Vn_c1'],
                         enc_top=tp['Mn_c'], enc_endcap_top=tp['Mn_c1'],
                         width=tp['Vn_a'], 
@@ -158,7 +160,7 @@ class TechInfo:
                         ),
                 ViaInfo(name='SG13G2_VIA_M4_M5', description='Via4 (Metal4→Metal5)', 
                         bottom=ld['Metal4'], cut=ld['Via4'], top=ld['Metal5'], bottom_grid=grid, top_grid=grid, 
-                        wbmin=0.2, hbmin=0.2, wtmin=0.2, htmin=0.2,
+                        wbmin=tp['Mn_a'], hbmin=tp['Mn_a'], wtmin=tp['Mn_a'], htmin=tp['Mn_a'],
                         enc_bottom=tp['Vn_c'], enc_endcap_bottom=tp['Vn_c1'],
                         enc_top=tp['Mn_c'], enc_endcap_top=tp['Mn_c1'],
                         width=tp['Vn_a'], 
@@ -168,7 +170,7 @@ class TechInfo:
                     ),
                 ViaInfo(name='SG13G2_VIA_M5_TM1', description='TopVia1 (Metal5→TopMetal1)', 
                         bottom=ld['Metal5'], cut=ld['TopVia1'], top=ld['TopMetal1'], bottom_grid=grid, top_grid=grid, 
-                        wbmin=0.2, hbmin=0.2, wtmin=tp['TM1_a'], htmin=tp['TM1_a'],
+                        wbmin=tp['Mn_a'], hbmin=tp['Mn_a'], wtmin=tp['TM1_a'], htmin=tp['TM1_a'],
                         enc_bottom=tp['TV1_c'], enc_endcap_bottom=tp['TV1_c'],
                         enc_top=tp['TV1_d'], enc_endcap_top=tp['TV1_d'],
                         width=tp['TV1_a'], 
@@ -187,11 +189,43 @@ class TechInfo:
             cls._instance = TechInfo(layers=layers, vias=vias)
         return cls._instance
     
+    @cached_property
+    def activ(self) -> LayerInfo:
+        return self.layers[0]
+        
+    @cached_property
+    def gat_poly(self) -> LayerInfo:
+        return self.layers[1]
+    
+    @cached_property
+    def metal1(self) -> LayerInfo:
+        return self.layers[3]
+    
+    @cached_property
+    def device_layer_names(self) -> List[LayerName]:
+        return [self.activ.name, self.gat_poly.name]
+    
+    @cached_property
+    def first_metal_layer_name(self) -> LayerName:
+        return self.metal1.name
+    
+    #----------------------------------------------- helper methods -------------------------------------------------   
+    
+    @cached_property
+    def via_and_top_layer_by_bottom_layer(self) -> Dict[LayerName, Tuple[ViaName, LayerName]]:
+        return {v.bottom.name: (v.name, v.top.name) for v in self.vias}
+    
     def layer_by_name(self, name: str) -> LayerInfo:
-        return [l for l in self.layers if l.name == name][0]
+        try:
+            return [l for l in self.layers if l.name == name][0]
+        except IndexError:
+            raise Exception(f"no layer found named '{name}'")
 
     def via_by_name(self, name: str) -> ViaInfo:
-        return [v for v in self.vias if v.name == name][0]
+        try:
+            return [v for v in self.vias if v.name == name][0]
+        except IndexError:
+            raise Exception(f"no via found named '{name}'")
 
     @cached_property
     def via_layers(self) -> Set[LayerInfo]:
