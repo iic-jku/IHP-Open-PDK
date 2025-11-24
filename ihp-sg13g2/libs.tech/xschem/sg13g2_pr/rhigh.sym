@@ -16,6 +16,7 @@ v {xschem version=3.4.7 file_version=1.2
 }
 G {}
 K {type=res
+lvs_format="@name @pinlist @model w=@w l=@l m=@m b=@b"
 format="@spiceprefix@name @pinlist @body @model w=@w l=@l m=@m b=@b"
 template="name=R1
 w=0.5e-6
