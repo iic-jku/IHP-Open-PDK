@@ -29,7 +29,8 @@ is not intended to be used for production at this moment.
 
 # Documentation
 
-Comprehensive documentation for the IHP Open Source PDK is available on [ReadTheDocs](https://ihp-open-pdk.readthedocs.io/en/latest/).
+Comprehensive documentation for the IHP Open Source PDK is available on [ReadTheDocs](https://ihp-open-pdk-docs.readthedocs.io/en/latest/).
+For building or contributing, visit the [IHP-Open-PDK-docs repository](https://github.com/IHP-GmbH/IHP-Open-PDK-docs).
 
 The documentation provides detailed information on PDK installation, setup for supported EDA tools, device libraries, layout rules, process specifications and design flow examples. It is the recommended starting point for users who want to explore the PDK structure, simulation models, layout design environments, etc.
 

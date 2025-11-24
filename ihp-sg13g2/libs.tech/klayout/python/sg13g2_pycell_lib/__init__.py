@@ -74,7 +74,8 @@ moduleNames = [
         'SVaricap_code',
         'pnpMPA_code',
         'isolbox_code',
-        'guard_ring_code'
+        'guard_ring_code',
+        'schottky_code'
 ]
 
 def getProcessNames():
