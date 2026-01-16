@@ -114,7 +114,7 @@ if __name__ == "__main__":
         print(f"Preparing $HOME{qucs_workspace} directory ...")
         print("#############################################\n")
         
-        source_directory = pdk_root + "/ihp-sg13g2/libs.tech/qucs/user_lib"
+        source_directory = pdk_root + "/ihp-sg13g2/libs.tech/qucs-s/user_lib"
         # Check if the source directory exists
         if not os.path.exists(source_directory):
             logging.error(f"Source directory '{source_directory}' does not exist.")
@@ -131,7 +131,7 @@ if __name__ == "__main__":
         
         # Copy examples to "Qucs Home" (<userhome>/[.qucs|QucsWorkspace]/)
         print("Copying examples into Qucs-S Home...")
-        source_directory = pdk_root + "/ihp-sg13g2/libs.tech/qucs/examples"
+        source_directory = pdk_root + "/ihp-sg13g2/libs.tech/qucs-s/examples"
         destination_directory = userhome + qucs_workspace + "IHP-Open-PDK-SG13G2-Examples_prj"
 
         if not os.path.exists(destination_directory):
@@ -187,6 +187,9 @@ if __name__ == "__main__":
     if is_program_installed(program_name):
         source_directory = pdk_root + "/ihp-sg13g2/libs.tech/verilog-a/psp103"
         command = "openvaf psp103_nqs.va --output " + destination_directory + "/psp103_nqs.osdi"    
+        print(f"{program_name} is available and about to run the command '{command}' in a location: {source_directory} ")	
+        exec_app_in_directory(command, source_directory)
+        command = "openvaf psp103.va --output " + destination_directory + "/psp103.osdi"    
         print(f"{program_name} is available and about to run the command '{command}' in a location: {source_directory} ")	
         exec_app_in_directory(command, source_directory)
         source_directory = pdk_root + "/ihp-sg13g2/libs.tech/verilog-a/r3_cmc"

@@ -18,7 +18,7 @@
 <Components>
   <GND * 1 320 690 0 0 0 0>
   <Idc I1 1 80 600 18 -26 0 1 "1 mA" 1>
-  <Lib schottky_nbl2 1 320 570 -37 45 0 0 "/home/$USER/.qucs/user_lib/IHP_PDK_nonlinear_components" 0 "schottky_nbl1" 0 "{Nx}" 1 "1" 1>
+  <Lib schottky_nbl2 1 320 570 -37 45 0 0 "$HOME/<qucs_workspace>/user_lib/IHP_PDK_nonlinear_components" 0 "schottky_nbl1" 0 "{Nx}" 1 "1" 1>
   <Vdc V1 1 160 690 -26 18 0 0 "0 V" 1>
   <GND * 1 80 700 0 0 0 0>
   <.SW SW1 1 100 300 0 70 0 0 "DC1" 1 "lin" 1 "I1" 1 "-1m" 1 "1m" 1 "2001" 1>
