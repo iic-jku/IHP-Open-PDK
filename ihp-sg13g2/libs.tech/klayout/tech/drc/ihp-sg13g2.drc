@@ -41,6 +41,9 @@ file_logger.formatter = formatter
 stdout_logger = Logger.new($stdout)
 stdout_logger.formatter = formatter
 
+# Don't buffer stdout
+$stdout.sync = true
+
 # MultiLogger class to broadcast to multiple loggers
 class MultiLogger
   def initialize(*targets)
@@ -116,12 +119,13 @@ def setup_run_mode(run_mode)
   end
 end
 
-# threads
+# Threads
 $threads = ($threads || Etc.nprocessors).to_i
 threads($threads)
-logger.info("KLayout will use #{$threads} thread(s) in tiled mode.")
+logger.info("KLayout will use #{$threads} thread(s) in tiling mode.")
 
 # Run mode
+$run_mode = $run_mode || 'deep'
 setup_run_mode($run_mode)
 logger.info("#{$run_mode} mode is enabled.")
 
@@ -171,8 +175,8 @@ logger.info("CONNECTIVITY_RULES enabled: #{CONNECTIVITY_RULES}.")
 # Method to get DRC values from JSON files
 def get_drc_values(logger)
   script_dir = File.expand_path(File.dirname(__FILE__))
-  $drc_json_default = $drc_json_default || File.join(script_dir, 'rule_decks/sg13g2_tech_default.json')
-  $drc_json = $drc_json || File.join(script_dir, '../../python/sg13g2_pycell_lib/sg13g2_tech_mod.json')
+  $drc_json_default = $drc_json_default || File.expand_path(File.join(script_dir, 'rule_decks/sg13g2_tech_default.json'))
+  $drc_json = $drc_json || File.expand_path(File.join(script_dir, '../../python/sg13g2_pycell_lib/sg13g2_tech_mod.json'))
 
   tech_rules = {}
   if $drc_json && $drc_json != $drc_json_default

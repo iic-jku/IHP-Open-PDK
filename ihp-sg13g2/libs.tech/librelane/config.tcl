@@ -54,21 +54,14 @@ set ::env(KLAYOUT_DEF_LAYER_MAP) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout
 
 set ::env(KLAYOUT_DRC_RUNSET) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/tech/drc/ihp-sg13g2.drc"
 set ::env(KLAYOUT_DRC_OPTIONS) [dict create]
-dict set ::env(KLAYOUT_DRC_OPTIONS) feol true
-dict set ::env(KLAYOUT_DRC_OPTIONS) beol true
-dict set ::env(KLAYOUT_DRC_OPTIONS) pin true
-dict set ::env(KLAYOUT_DRC_OPTIONS) forbidden true
-dict set ::env(KLAYOUT_DRC_OPTIONS) run_mode deep
 dict set ::env(KLAYOUT_DRC_OPTIONS) no_recommended true
-dict set ::env(KLAYOUT_DRC_OPTIONS) drc_json_default "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/tech/drc/rule_decks/sg13g2_tech_default.json"
+dict set ::env(KLAYOUT_DRC_OPTIONS) run_mode deep
 
 set ::env(KLAYOUT_DENSITY_RUNSET) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/tech/drc/rule_decks/density.drc"
 set ::env(KLAYOUT_DENSITY_OPTIONS) [dict create]
-dict set ::env(KLAYOUT_DENSITY_OPTIONS) drc_json_default "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/tech/drc/rule_decks/sg13g2_tech_default.json"
 
 set ::env(KLAYOUT_ANTENNA_RUNSET) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/tech/drc/rule_decks/antenna.drc"
 set ::env(KLAYOUT_ANTENNA_OPTIONS) [dict create]
-dict set ::env(KLAYOUT_ANTENNA_OPTIONS) drc_json_default "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/tech/drc/rule_decks/sg13g2_tech_default.json"
 
 set ::env(KLAYOUT_FILLER_SCRIPT) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/tech/scripts/filler.py"
 
