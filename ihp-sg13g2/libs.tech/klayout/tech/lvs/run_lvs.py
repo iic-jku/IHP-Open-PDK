@@ -334,7 +334,7 @@ def main(lvs_run_dir: str, arguments: dict):
     switches = generate_klayout_switches(arguments, layout_path, netlist_path)
 
     # Run LVS check
-    res_db_files = run_check(lvs_rule_deck, layout_path, lvs_run_dir, switches)
+    res_db_files = [run_check(lvs_rule_deck, layout_path, lvs_run_dir, switches)]
 
     # Check run
     check_lvs_results(res_db_files)
