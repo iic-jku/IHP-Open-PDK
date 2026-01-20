@@ -115,7 +115,7 @@ def check_layout_type(layout_path):
     return layout_path
 
 
-def get_top_cell_names(gds_path):
+def get_top_cell_names(gds_path) -> list[str]:
     """
     Get the top cell names from the GDS file.
 
@@ -136,7 +136,7 @@ def get_top_cell_names(gds_path):
     return top_cells
 
 
-def get_run_top_cell_name(arguments, layout_path):
+def get_run_top_cell_name(arguments, layout_path) -> str:
     """
     Get the top cell name to use for running. If it's provided by the user, we use the user input.
     If not, we get it from the GDS file.
@@ -170,7 +170,7 @@ def get_run_top_cell_name(arguments, layout_path):
     return topcell
 
 
-def generate_klayout_switches(arguments, layout_path, netlist_path):
+def generate_klayout_switches(arguments, layout_path, netlist_path) -> dict:
     """
     Parse all the args from input to prepare switches for LVS run.
 
@@ -219,7 +219,7 @@ def generate_klayout_switches(arguments, layout_path, netlist_path):
     return switches
 
 
-def build_switches_string(sws: dict):
+def build_switches_string(sws: dict) -> str:
     """
     Build switches string from dictionary.
 
@@ -246,7 +246,7 @@ def check_lvs_results(results_db_files: list):
         exit(1)
 
 
-def run_check(lvs_file: str, path: str, run_dir: str, sws: dict):
+def run_check(lvs_file: str, path: str, run_dir: str, sws: dict) -> str:
     """
     Run LVS check.
 
