@@ -71,6 +71,7 @@ class LVSTestCase:
     name: str
     top_cell_name: str
     layout_path: str | Path
+    schematic_path: str | Path | None
     netlist_path: str | Path   # expected netlist
 
     def run(self, run_dir_base: str | Path) -> LVSResult:

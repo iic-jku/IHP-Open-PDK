@@ -29,6 +29,9 @@ from pathlib import Path
 import sys
 from typing import *
 
+from xschem_util import xschem_netlist, NetlistMode
+
+
 directory_containing_this_script = os.path.realpath(os.path.dirname(__file__))
 
 try:
@@ -56,6 +59,7 @@ def find_lvs_testcases() -> List[LVSTestCase]:
                     name=cell_name,
                     top_cell_name=cell_name,
                     layout_path=lp,
+                    schematic_path=parent / f"{cell_name}.sch",
                     netlist_path=parent / f"{cell_name}.spice"
                 )
             )
@@ -72,6 +76,7 @@ if __name__ == "__main__":
     for testcase in lvs_testcases:
         print(f"\n[{testcase.name}] Running LVS check …")
 
+        
         result = testcase.run(run_dir_base=run_dir_base)
 
         if result.passed:
