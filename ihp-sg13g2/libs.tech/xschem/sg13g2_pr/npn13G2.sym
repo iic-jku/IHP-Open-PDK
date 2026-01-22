@@ -1,4 +1,4 @@
-v {xschem version=3.1.0 file_version=1.2
+v {xschem version=3.4.5 file_version=1.2
 * Copyright 2023 IHP PDK Authors
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,12 @@ v {xschem version=3.1.0 file_version=1.2
 }
 G {}
 K {type=vertical_npn
-lvs_format="@name @pinlist @model le=900e-9 we=70.0n m=@Nx"
+lvs_format="@lvs_spiceprefix@name @pinlist @model le=900e-9 we=70.0n m=@Nx"
 format="@spiceprefix@name @pinlist @model Nx=@Nx"
 template="name=Q1
 model=npn13G2
 spiceprefix=X
+lvs_spiceprefix=Q
 Nx=1
 "
 drc="hbt_drc @name @symname @model @Nx @El"

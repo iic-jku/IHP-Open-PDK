@@ -1,4 +1,4 @@
-v {xschem version=3.1.0 file_version=1.2
+v {xschem version=3.4.5 file_version=1.2
 * Copyright 2023 IHP PDK Authors
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,14 @@ v {xschem version=3.1.0 file_version=1.2
 * See the License for the specific language governing permissions and
 * limitations under the License.
 }
-
 G {}
 K {type=capacitor
+lvs_format="@lvs_spiceprefix@name @pinlist @model C=@C"
 format="@spiceprefix@name @pinlist @model C=@C"
-template="name=C1 model=cparasitic C=10f  spiceprefix=X"
+template="name=C1 model=cparasitic C=10f  
+spiceprefix=X
+lvs_spiceprefix=C
+"
 }
 V {}
 S {}
@@ -33,4 +36,3 @@ T {c1} 5 18.75 0 0 0.15 0.15 {layer=7}
 T {@name} 15 -28.75 0 0 0.2 0.2 {}
 T {C=@C} 15 6.25 0 0 0.2 0.2 {layer=13}
 T {@model} 15 -11.25 0 0 0.2 0.2 {}
-
