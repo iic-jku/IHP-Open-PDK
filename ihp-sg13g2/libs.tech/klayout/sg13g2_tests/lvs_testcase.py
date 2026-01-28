@@ -22,6 +22,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+from typing import *
 
 
 def lvs_script_path() -> str:
@@ -34,10 +35,18 @@ def lvs_script_path() -> str:
 @dataclass
 class LVSResult:
     testcase: LVSTestCase
-    return_code: int
-    report_path: Path
+    return_code: Optional[int]
+    report_path: Optional[Path]
     passed: bool
-    messages: list[str]
+    messages: List[str]
+
+    @classmethod
+    def error_before_test_execution(cls, testcase: LVSTestCase, msg: str):
+        return LVSResult(testcase=testcase,
+                         return_code=None,
+                         report_path=None,
+                         passed=False,
+                         messages=[msg])
 
 
 _LVSDB_RE = re.compile(r"runset output at:\s*(?P<path>\S+)")
@@ -45,10 +54,10 @@ _ERROR_RE = re.compile(r"\bERROR\b\s*:\s*(?P<msg>.*)")
 _SUCCESS_RE = re.compile(r"\bINFO\b\s*:\s*Congratulations!", re.IGNORECASE)
 
 
-def parse_lvs_output(stdout: str, stderr: str) -> tuple[Path | None, bool, list[str]]:
-    lvsdb_path: Path | None = None
+def parse_lvs_output(stdout: str, stderr: str) -> Tuple[Optional[Path], bool, List[str]]:
+    lvsdb_path: Optional[Path] = None
     success = False
-    messages: list[str] = []
+    messages: List[str] = []
 
     combined = stdout.splitlines() + stderr.splitlines()
 
@@ -70,11 +79,13 @@ def parse_lvs_output(stdout: str, stderr: str) -> tuple[Path | None, bool, list[
 class LVSTestCase:
     name: str
     top_cell_name: str
-    layout_path: str | Path
-    schematic_path: str | Path | None
-    netlist_path: str | Path   # expected netlist
+    layout_path: Path
+    schematic_path: Optional[Path]
+    netlist_path: Path   # expected netlist
 
-    def run(self, run_dir_base: str | Path) -> LVSResult:
+    def run(self,
+            run_dir_base: Optional[Path],
+            verbose: bool) -> LVSResult:
         fs_test_name = self.name.replace(' ', '_').replace('/', '-').lower()
         run_dir = Path(run_dir_base).resolve() / fs_test_name
         
@@ -89,11 +100,12 @@ class LVSTestCase:
         ]
         
         cmd_args = ['python3', lvs_script_path()] + args
-        print(f"Calling subprocess with: {' '.join(cmd_args)}")
+        if verbose:
+            print(f"Calling subprocess with: {' '.join(cmd_args)}")
         
         result = subprocess.run(cmd_args, capture_output=True, text=True)
         if result.returncode != 0:
-            print(f"ERROR: Script terminated with exit code {result.returncode}")
+            print(f"ERROR: LVS script terminated with exit code {result.returncode}")
 
         lvsdb_path, passed, messages = parse_lvs_output(result.stdout, result.stderr)
 

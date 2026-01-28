@@ -17,23 +17,30 @@
 ########################################################################
 
 from __future__ import annotations
-from dataclasses import dataclass, field
 from enum import StrEnum
 import os
 from pathlib import Path
-import re
 import subprocess
+from subprocess import CompletedProcess
+from typing import *
 
 
-class NetlistMode(str, Enum):
+class NetlistMode(StrEnum):
     SIMULATION = 'sim'
     LVS = 'lvs'
+
+
+def xschemrc_default_path() -> Path:
+    path = Path(os.environ['PDK_ROOT']) / os.environ['PDK'] /\
+           'libs.tech' / 'xschem' / 'xschemrc'
+    return path
 
 
 def xschem_netlist(rcfile_path: str | Path,
                    sch_path: str | Path,
                    output_netlist_path: str | Path,
-                   mode: NetlistMode):
+                   mode: NetlistMode,
+                   verbose: bool) -> CompletedProcess[str]:
     rcfile_path = Path(rcfile_path).resolve()
     sch_path = Path(sch_path).resolve()
     output_netlist_path = Path(output_netlist_path).resolve()
@@ -57,15 +64,11 @@ def xschem_netlist(rcfile_path: str | Path,
     ]
 
     cmd_args = ['xschem'] + args
-    print(f"Calling subprocess with: {' '.join(cmd_args)}")
+    if verbose:
+        print(f"Calling subprocess with: {' '.join(cmd_args)}")
 
     result = subprocess.run(cmd_args, capture_output=True, text=True)
     if result.returncode != 0:
-        print(f"ERROR: Script terminated with exit code {result.returncode}")
+        print(f"ERROR: xschem terminated with exit code {result.returncode}")
 
-
-    # xschem_ihp -q -x --command "xschem set format lvs_format;
-    #    set netlist_dir "netlists"; xschem netlist \"out.spice\""
-    #    lvs_testcases/rppd_test.sch
-    pass
-
+    return result
