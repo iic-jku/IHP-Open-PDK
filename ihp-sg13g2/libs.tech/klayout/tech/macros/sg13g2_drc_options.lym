@@ -232,7 +232,6 @@
     # style (can be adjusted)
     @dialog_options.setStyleSheet(
       "QDialog {\n" \
-      "  background-color: #f8f9fa;\n" \
       "  border-radius: 12px;\n" \
       "  padding: 12px;\n" \
       "}\n" \

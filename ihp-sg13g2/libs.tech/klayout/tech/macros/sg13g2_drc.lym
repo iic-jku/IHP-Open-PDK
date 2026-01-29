@@ -213,7 +213,7 @@ end
 @title_font.setPointSize(14)
 @title_font.setBold(true)
 @title_label.setFont(@title_font)
-@title_label.setStyleSheet("color: #2c3e50; margin-left: 10px;")
+@title_label.setStyleSheet("margin-left: 10px;")
 @header_layout.addWidget(@title_label)
 @header_layout.addStretch
 @main_layout.addLayout(@header_layout)
@@ -221,7 +221,7 @@ end
 # Log output area
 @log_output = RBA::QTextEdit.new
 @log_output.setReadOnly(true)
-@log_output.setStyleSheet("background-color: #f4f4f4; font-family: monospace;")
+@log_output.setStyleSheet("font-family: monospace;")
 @main_layout.addWidget(@log_output)
 
 # Close button
