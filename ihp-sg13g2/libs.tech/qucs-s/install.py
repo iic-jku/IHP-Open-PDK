@@ -112,8 +112,7 @@ if __name__ == "__main__":
     for qucs_workspace in ['/.qucs/', '/QucsWorkspace/']:
     
         print(f"Preparing $HOME{qucs_workspace} directory ...")
-        print("#############################################\n")
-        
+        print("#############################################\n")    
         source_directory = pdk_root + "/ihp-sg13g2/libs.tech/qucs-s/user_lib"
         # Check if the source directory exists
         if not os.path.exists(source_directory):
