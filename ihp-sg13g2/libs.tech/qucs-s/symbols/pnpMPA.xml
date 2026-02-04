@@ -15,7 +15,7 @@
     <Netlists>
         <NgspiceNetlist value=
             "{{{Letter}}}::schematic_id='nequal'Q{PartCounter} {nets} {{{model}}}::model='nonempty'
-            {{A={A}}}::A='nonempty' {{P={P}}}::P='nonempty' {{m={m}}}::m='nonempty'">
+            {{a={A}}}::A='nonempty' {{p={P}}}::P='nonempty' {{m={m}}}::m='nonempty'">
         </NgspiceNetlist>
         <CDLNetlist value="{NgspiceNetlist}"></CDLNetlist>
     </Netlists>

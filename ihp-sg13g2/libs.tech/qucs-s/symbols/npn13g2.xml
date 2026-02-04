@@ -2,14 +2,14 @@
 <Component
   xsi:noNamespaceSchemaLocation="Component.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  library="IHP SG13G2 devices" names="npn13g2" schematic_id = "Q">
+  library="IHP SG13G2 devices" names="npn13G2" schematic_id = "Q">
     <Description>
         SG13G2 basic HBT transistor
     </Description>
     <Models>
-        <DefaultModel value="npn13g2">
+        <DefaultModel value="npn13G2">
         </DefaultModel>
-        <SpiceModel value="npn13g2">
+        <SpiceModel value="npn13G2">
         </SpiceModel>
     </Models>
     <Netlists>
@@ -25,7 +25,7 @@
         </Symbol>
     </Symbols>
     <Parameters>
-        <Parameter name="model" unit="" default_value="npn13g2" show="false">
+        <Parameter name="model" unit="" default_value="npn13G2" show="false">
             <Description>Model name</Description>
         </Parameter>
         <Parameter name="Letter" unit="" default_value="X" show="false">
