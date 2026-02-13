@@ -179,6 +179,9 @@
 
     ## --- Basic Settings Tab ---
     @spacer = RBA::QSpacerItem.new(0, 5)
+    # Transfer ownership to C++ to prevent Ruby GC from freeing the spacer item.
+    # See: https://github.com/KLayout/klayout/issues/2273 for more information
+    @spacer._unmanage
     @basic_tab = RBA::QWidget.new
     @basic_layout_setup = RBA::QFormLayout.new(@basic_tab)
     @basic_layout_setup.setSpacing(15)
