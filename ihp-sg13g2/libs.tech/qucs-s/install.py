@@ -99,6 +99,11 @@ if __name__ == "__main__":
         action="store_true",
         help="Skip Verilog-A model compilation step",
     )
+    parser.add_argument(
+        "--no-qucs-check",
+        action="store_true",
+        help="Skip check if qucs-s binary exists",
+    )
     workspace_group = parser.add_mutually_exclusive_group()
     workspace_group.add_argument(
         "--no-qucs-workspace",
@@ -116,10 +121,11 @@ if __name__ == "__main__":
     info()
 
     # Check if 'Qucs-S' tool is available
-    PROGRAM_NAME = "qucs-s"
-    if not is_program_installed(PROGRAM_NAME):
-        logging.error("%s is not installed.", PROGRAM_NAME)
-        exit(1)
+    if not args.no_qucs_check:
+        PROGRAM_NAME = "qucs-s"
+        if not is_program_installed(PROGRAM_NAME):
+            logging.error("%s is not installed.", PROGRAM_NAME)
+            exit(1)
 
     # Check if PDK_ROOT env variable exists
     pdk_root = os.environ.get("PDK_ROOT")
