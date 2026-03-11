@@ -363,12 +363,11 @@ value="
 .lib cornerCAP.lib cap_typ
 .lib cornerDIO.lib dio_tt
 "}
-C {code_shown.sym} 840 -430 0 0 {
-name=PAD_MODELS1
+C {code_shown.sym} 840 -430 0 0 {name=PAD_MODELS
 only_toplevel=true
 value="tcleval(
 .include diodes.lib
 .include $::PDK_ROOT/$::PDK/libs.ref/sg13g2_io/spice/sg13g2_io.spi
-"
+)"
 spice_ignore=false
       }
