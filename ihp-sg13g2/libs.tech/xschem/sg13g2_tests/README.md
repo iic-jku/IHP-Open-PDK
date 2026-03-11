@@ -28,7 +28,7 @@ The test circuits are organized by simulation type and shown in the table below:
 | sp_mim_cap.sch             | The S-parameters  simulation of a  MiM capacitor. Measurements of capacitance and series resistance. Three corners available: cap_typ, cap_bcs, cap_wcs.   |
 | sp_parasitic_cap.sch       | The S-parameters  simulation of a parasitic capacitor. Measurements of capacitance and series resistance.  Measurements of -3dB cut-off frequency. Three corners available: cap_typ, cap_bcs, cap_wcs.   |
 | sp_rfmim_cap.sch           | The S-parameters  simulation of a rfmim capacitor. Measurements of capacitance and series resistance. Three corners available: cap_typ, cap_bcs, cap_wcs.   |
-| sg13g2_IOPad_tb.sch        | The transient simulation of all IO pads (IOVDD, IOVSS, VDD, VSS, analog, input, output, bidirectional pad, tristate output)   |
+| sg13g2_IOPad_tb.sch        | The transient simulation of all IO pads (IOVDD, IOVSS, VDD, VSS, analog, input, output, bidirectional pad, tristate output).   |
 
 
 ## Python post processing scripts
