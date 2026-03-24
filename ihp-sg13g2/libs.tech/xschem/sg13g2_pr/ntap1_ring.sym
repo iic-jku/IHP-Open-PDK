@@ -1,4 +1,4 @@
-v {xschem version=3.4.5 file_version=1.2
+v {xschem version=3.4.8RC file_version=1.3
 * Copyright 2023 IHP PDK Authors
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,9 @@ v {xschem version=3.4.5 file_version=1.2
 }
 G {}
 K {type=res
-lvs_format="tcleval(@name @pinlist @model A=[ev \{ 2 * @rw * ( @w + @l - 2 * @rw ) \} ] P=[ev \{ 4 * ( @w + @l - 2 * @rw ) \} ] )"
+lvs_format="tcleval(R@name @pinlist @model A=[ev \{ 2 * @rw * ( @w + @l - 2 * @rw ) \} ] P=[ev \{ 4 * ( @w + @l - 2 * @rw ) \} ] )"
 *lvs_format="@name @pinlist @model w=@w l=@l"
-format="tcleval(@spiceprefix@name @pinlist @model R=[ev \{  1.0 / ( 1.0 / ( 9.8e-10 / ( 2 * @rw * ( @w + @l - 2 * @rw ) ) ) + 1.0 / ( 9.8e-4 / ( 2.0 * ( 4 * ( @w + @l - 2 * @rw ) ) ) ) )\}] w=@w l=@l rw=@rw )"
+format="tcleval(@spiceprefix@name @pinlist @model R=[ev \{  1.0 / ( 1.0 / ( 9.8e-10 / ( 2 * @rw * ( @w + @l - 2 * @rw ) ) ) + 1.0 / ( 9.8e-4 / ( 2.0 * ( 4 * ( @w + @l - 2 * @rw ) ) ) ) )\}] w=@w l=@l )"
 template="name=R1
 model=ntap1
 spiceprefix=X
@@ -27,9 +27,9 @@ l=3e-6
 rw=0.3e-6
 "
 }
-
 V {}
 S {}
+F {}
 E {}
 L 4 0 20 0 30 {}
 L 4 0 20 7.5 17.5 {}
@@ -43,14 +43,10 @@ L 4 -7.5 -17.5 7.5 -12.5 {}
 L 4 -7.5 -17.5 0 -20 {}
 L 4 0 -30 0 -20 {}
 L 4 -10 20 10 20 {}
-B 5 -2.5 -32.5 2.5 -27.5 {name=P dir=inout propag=0}
-B 5 -2.5 27.5 2.5 32.5 {name=M dir=inout propag=1}
+B 5 -2.5 -32.5 2.5 -27.5 {name=P dir=inout propag=1}
+B 5 -2.5 27.5 2.5 32.5 {name=M dir=inout propag=0}
 T {@model} 15 -16.25 0 0 0.2 0.2 {}
 T {w=@w} 15 -3.75 0 0 0.2 0.2 {layer=13}
 T {l=@l} 15 6.25 0 0 0.2 0.2 {layer=13}
-T {rw=@rw} 15 15.75 0 0 0.2 0.2 {layer=13}
-T {@spiceprefix@name} 15 -28.75 0 0 0.2 0.2 {}
-T {tcleval( A=[ ev \{ 2 * @rw * ( @w + @l - 2 * @rw ) \} ] )} 20 30 0 0 0.2 0.2 {layer=13}
-T {tcleval( P=[ ev \{ 4 * ( @w + @l - 2 * @rw ) \} ] )} 20 40 0 0 0.2 0.2 {layer=13}
-T {tcleval( R=[ ev \{  1.0 / ( 1.0 / ( 9.8e-10 / ( 2 * @rw * ( @w + @l - 2 * @rw ) ) ) + 1.0 / ( 9.8e-4 / ( 2.0 * ( 4 * ( @w + @l - 2 * @rw ) ) ) ) )\}] )} 20 50 0 0 0.2 0.2 {layer=13}
-
+T {@name} 15 -28.75 0 0 0.2 0.2 {}
+T {tcleval( R=[ ev \{  1.0 / ( 1.0 / ( 9.8e-10 / ( 2 * @rw * ( @w + @l - 2 * @rw ) ) ) + 1.0 / ( 9.8e-4 / ( 2.0 * ( 4 * ( @w + @l - 2 * @rw ) ) ) ) )\}] )} 20 20 0 0 0.2 0.2 {layer=13}
