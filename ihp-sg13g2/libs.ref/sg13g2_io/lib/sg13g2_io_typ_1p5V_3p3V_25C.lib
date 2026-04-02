@@ -4694,5 +4694,18 @@ library (sg13g2_io_typ_1p5V_3p3V_25C) {
             fall_capacitance : 15.0;
             fall_capacitance_range (12.0, 15.0);
         }
+        pin (padbare) {
+            direction : inout;
+            is_pad : false;
+            input_voltage : io_input;
+            related_ground_pin : iovss;
+            related_power_pin : iovdd;
+            max_transition : 200;
+            capacitance : 15.0;
+            rise_capacitance : 15.0;
+            rise_capacitance_range (12.0, 15.0);
+            fall_capacitance : 15.0;
+            fall_capacitance_range (12.0, 15.0);
+        }
     }
 }

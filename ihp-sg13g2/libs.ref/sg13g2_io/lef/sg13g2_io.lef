@@ -3664,12 +3664,6 @@ MACRO sg13g2_IOPadAnalog
     USE SIGNAL ;
     PORT
       LAYER Metal2 ;
-        RECT 26.105 179.000 50.875 180.000 ;
-      LAYER Metal3 ;
-        RECT 26.105 179.710 50.875 180.000 ;
-    END
-    PORT
-      LAYER Metal2 ;
         RECT 5.000 0.000 75.000 3.000 ;
       LAYER Metal3 ;
         RECT 5.000 0.000 75.000 3.000 ;
@@ -3683,12 +3677,24 @@ MACRO sg13g2_IOPadAnalog
         RECT 5.000 0.000 75.000 3.000 ;
     END
   END pad
+  PIN padbare
+    DIRECTION INOUT ;
+    USE SIGNAL ;
+    PORT
+# Only allow connection on Metal3
+#      LAYER Metal2 ;
+#        RECT 26.105 179.000 50.875 180.000 ;
+      LAYER Metal3 ;
+        RECT 26.105 179.710 50.875 180.000 ;
+    END
+  END padbare
   PIN padres
     DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
-      LAYER Metal2 ;
-        RECT 57.460 147.180 57.750 180.000 ;
+# Only allow connection on Metal3
+#      LAYER Metal2 ;
+#        RECT 57.460 147.180 57.750 180.000 ;
       LAYER Metal3 ;
         RECT 57.355 179.710 57.855 180.000 ;
     END
