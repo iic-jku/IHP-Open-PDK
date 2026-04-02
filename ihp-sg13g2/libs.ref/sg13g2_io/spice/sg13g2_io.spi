@@ -829,7 +829,7 @@ XRoff iovdd off sub! rppd l=12.9um w=0.5um
 .ends sg13g2_Clamp_P20N0D
 
 * sg13g2_IOPadAnalog
-.subckt sg13g2_IOPadAnalog vss vdd iovss iovdd pad padres
+.subckt sg13g2_IOPadAnalog vss vdd iovss iovdd pad padres padbare
 Xnclamp iovss iovdd pad sg13g2_Clamp_N20N0D
 Xpclamp iovss iovdd pad sg13g2_Clamp_P20N0D
 Xdcndiode iovss pad iovdd sg13g2_DCNDiode
