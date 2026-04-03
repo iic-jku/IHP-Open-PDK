@@ -123,7 +123,7 @@ B 5 5 -342.5 10 -337.5 {name=vss dir=inout}
 B 5 15 -332.5 20 -327.5 {name=vdd dir=inout}
 B 5 25 -322.5 30 -317.5 {name=iovss dir=inout}
 B 5 37.5 -312.5 42.5 -307.5 {name=iovdd dir=inout}
-B 5 97.5 -352.5 102.5 -347.5 {name=pad dir=inout}
+B 5 97.5 -352.5 102.5 -347.5 {name=padbare dir=inout}
 B 5 197.5 -352.5 202.5 -347.5 {name=padres dir=inout}
 B 5 107.5 -102.5 112.5 -97.5 {name=pad dir=inout}
 P 4 5 0 -300 0 0 210 0 210 -300 0 -300 {}
@@ -141,7 +141,7 @@ T {vss} 11.25 -275 1 1 0.15 0.15 {layer=7}
 T {vdd} 21.25 -275 1 1 0.15 0.15 {layer=7}
 T {iovss} 31.25 -275 1 1 0.15 0.15 {layer=7}
 T {iovdd} 41.25 -275 1 1 0.15 0.15 {layer=7}
-T {pad} 98.75 -275 1 1 0.15 0.15 {layer=7}
+T {padbare} 98.75 -263.75 1 1 0.15 0.15 {layer=7}
 T {padres} 208.75 -270 1 1 0.15 0.15 {layer=7}
 T {pad} 108.75 -110 1 1 0.15 0.15 {layer=7}
 T {@symname} 198.5 -3 3 0 0.15 0.15 {}
