@@ -21,7 +21,7 @@ lvs_format="tcleval(Q@name @pinlist @model a=[ev \{ @w * @l \}] p=[ev \{ ( @w + 
 template="name=Q1
 model=pnpMPA
 spiceprefix=X
-w=1.0e-6
+w=0.7e-6
 l=2.0e-6
 m=1
 "}
