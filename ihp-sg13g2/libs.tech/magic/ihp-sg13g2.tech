@@ -604,6 +604,8 @@ connect
   *ptap,*hvptap	*ndiff,*hvndiff
   npn,pbc	npn,pbc
   pbc,*m1	pbc,*m1
+  schottky,sdic	schottky,sdic
+  sdic,*m1	sdic,*m1
   *m1,m1fill,iprobe,diffprobe	*m1,m1fill,iprobe,diffprobe
   *m2,m2fill	*m2,m2fill
   *m3,m3fill	*m3,m3fill

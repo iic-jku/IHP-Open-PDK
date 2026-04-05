@@ -16,13 +16,13 @@
 #
 ########################################################################
 
-# Command script for generating cell schottky_nbl1
+# Command script for generating cell "schottky" for device schottky_nbl1
 
 suspendall
 tech unlock *
 set curunits [units]
 units internal
-load schottky_nbl1 -silent
+load schottky -silent
 box values 0 0 0 0
 box values -110 -84 350 464
 paint dnwell
@@ -181,29 +181,24 @@ paint metal2
 box values -116 -363 356 -139
 paint metal2
 box values 3 -118 3 -118
-label schottky_nbl1 FreeSans 70 0 0 0 c comment
-select area label
-setlabel sticky true
+label schottky_nbl1 FreeSans 70 0 0 0 c -comment
 box values 120 -251 120 -251
-label PLUS FreeSans 140 0 0 0 c metal2
-select area label
-setlabel sticky true
+label PLUS FreeSans 140 0 0 0 c -metal2
 box values 670 154 670 154
-label TIE FreeSans 37 0 0 0 c hvpsubdiffcont
-select area label
-setlabel sticky true
+label TIE FreeSans 37 0 0 0 c -hvpsubdiffcont
 box values -430 154 -430 154
-label TIE FreeSans 37 0 0 0 c hvpsubdiffcont
-select area label
-setlabel sticky true
+label TIE FreeSans 37 0 0 0 c -hvpsubdiffcont
 box values 120 565 120 565
-label MINUS FreeSans 131 0 0 0 c metal1
-select area label
-setlabel sticky true
+label MINUS FreeSans 131 0 0 0 c -metal1
 # Note: Use mask hint for pblock to avoid DRC errors.
 # PWELLBLK will be generated automatically.
 property MASKHINTS_PWELLBLK -326 -368 566 -130 -326 -130 -160 510 400 -130 566 510 -326 510 566 670
 select clear
+property gencell schottky
+property library sg13g2
+if {[info var parameters] == "parameters"} {
+    property parameters $parameters
+}
 view
 units {*}$curunits
 tech revert
