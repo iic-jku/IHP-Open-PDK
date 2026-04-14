@@ -164,6 +164,7 @@ if the environment variable 'IHP_PYCELL_LIB_PRINT_DEFINES_SET' is set.
 class PyCellLib(pya.Library):
     def __init__(self):
         self.description = "IHP SG13G2 Pcells"
+        self.technology = 'sg13g2'
 
         tech = Tech.get('SG13_dev')
 
