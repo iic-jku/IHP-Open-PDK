@@ -323,17 +323,21 @@ endmodule
 // type: Analog
 `timescale 1ns/10ps
 `celldefine
-module sg13g2_IOPadAnalog (iovdd, iovss, vdd, vss, pad, padres);
+module sg13g2_IOPadAnalog (iovdd, iovss, vdd, vss, pad, padres, padbare);
 	inout iovdd;
 	inout iovss;
 	inout vdd;
 	inout vss;
 	inout pad;
 	inout padres;
+	inout padbare;
 
 	// Function
 	assign pad = padres;
 	assign padres = pad;
+	
+	assign pad = padbare;
+	assign padbare = pad;
 
 	// Timing
 	specify
