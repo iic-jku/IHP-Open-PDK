@@ -455,8 +455,9 @@ style  sg13g2 variants ()
  and-not PSD
  copyup nsubcheck
 
- templayer ntaparea nsdarea
+ templayer ntaparea
  tagged well DIFF
+ and nsdarea
  and-not vararea
  and-not DIGITALID
 
@@ -479,8 +480,9 @@ style  sg13g2 variants ()
  and-not THKOX,hvcheck
  copyup psubcheck
 
- templayer ptaparea psdarea
+ templayer ptaparea
  tagged sub! DIFF
+ and psdarea
  and SUBCUT,ptapcheck
  and-not DIGITALID
  copyup ptapcheck
@@ -523,8 +525,9 @@ style  sg13g2 variants ()
  and THKOX,hvcheck
  copyup hvnsubcheck
 
- templayer hvntaparea hvnsdarea
+ templayer hvntaparea
  tagged well DIFF
+ and hvnsdarea
  and-not DIGITALID
 
  layer hvntap hvntaparea
@@ -546,8 +549,9 @@ style  sg13g2 variants ()
  and-not vararea
  copyup hvpsubcheck
 
- templayer hvptaparea hvpsdarea
+ templayer hvptaparea
  tagged sub! DIFF
+ and hvpsdarea
  and-not DIGITALID
 
  layer hvptap hvptaparea
