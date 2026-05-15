@@ -38,24 +38,22 @@ proc setCurrentCellParameters {parameters} {
     global currentCellParameters
 
     set currentCellParameters [dict create]
+    set zeroLengthPattern [format "'?%c'?,?" 0x2717]
 
     dict for {key value} $parameters {
+        # remove decoration from key
         regexp {'?([^',]+)'?:?} $key match undecoratedKey
-        #puts "DEB $key=$value"
-        if {[regexp {'?(__isspace__(\d+))'?,?} $value match keyword numSpaces]} {
-            #puts "DEB numSpaces $numSpaces"
-            if {[string equal $numSpaces 0]} {
-                #puts "DEB zero numSpaces"
-                set undecoratedValue {}
-            } else {
-                set undecoratedValue [format "%-*s" $numSpaces ""]
-            }
+
+        if {[regexp $zeroLengthPattern $value match]} {
+            set undecoratedValue {}
         } else {
-            # remove decoration from key/value
+            # map space pattern to space
+            set value [string map {"\u2709" " "} $value]
+
+            # remove decoration from value
             regexp {'?([^',]+)'?,?} $value match undecoratedValue
         }
 
-        #puts "DEB undecoratedValue='$undecoratedValue'"
         dict append currentCellParameters $undecoratedKey $undecoratedValue
     }
 }
@@ -65,18 +63,14 @@ proc getCurrentCellParameters {} {
 
     set coercedCellParameters [dict create]
 
-    #puts "DEB getCurrentCellParameters"
-
     dict for {key value} $currentCellParameters {
-        #puts "DEB Tcl parameter: $key='$value'"
-        if {[regexp {^\s*$} $value match]} {
-            set numSpaces [string length $match]
-            set value '__isspace__$numSpaces'
+        if {$value eq ""} {
+            set value "\u2717"
+        } else {
+            set value [string map {" " "\u2709"} $value]
         }
         dict append coercedCellParameters $key $value
     }
-
-    #puts "DEB Tcl parameters: $coercedCellParameters"
 
     return $coercedCellParameters
 }
