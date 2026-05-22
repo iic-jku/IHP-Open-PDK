@@ -345,7 +345,7 @@ class rppd(ResistorBase):
             if stripes > 1 :  # cover Bends
                 if oddp(stripes) :   # odd stripesnumber
                     dbCreateRect(self, sallayer, Box(xpos1-salover, ypos2,
-                                                     xpos1+(stripes-1)*(self.w+self.ps)-ps+salover, ypos2+self.w+salover))
+                                                     xpos1+(stripes-1)*(self.w+self.ps)-self.ps+salover, ypos2+self.w+salover))
                     dbCreateRect(self, extBlocklayer, Box(xpos1-salover, ypos2,
                                                           xpos1+(stripes-1)*(self.w+self.ps)-self.ps+salover, ypos2+self.w+salover))
                     dbCreateRect(self, sallayer, Box(xpos1+self.w+self.ps-salover, ypos1,
@@ -465,7 +465,7 @@ class rppd(ResistorBase):
     
             if stripes > 2:
                 xpos1 = xpos1 - self.w - self.ps
-                dbCreateRect(self, psdlayer, Box(xpos1+w+psdover, ypos2, xpos1+self.w+self.ps-psdover, ypos2+dir*(li_salblock+poly_cont_len+psdover)))
+                dbCreateRect(self, psdlayer, Box(xpos1+self.w+psdover, ypos2, xpos1+self.w+self.ps-psdover, ypos2+dir*(li_salblock+poly_cont_len+psdover)))
                 
         # **************************************************************
         # now draw the label

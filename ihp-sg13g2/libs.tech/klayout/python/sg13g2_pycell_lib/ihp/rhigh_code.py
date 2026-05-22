@@ -373,7 +373,7 @@ class rhigh(ResistorBase):
                     dbCreateRect(self, sallayer, Box(xpos1+w+ps-salover, ypos1, xpos1+stripes*(w+ps)-ps+salover, ypos1-w-salover))
                     # 09.02.07 GGa added EXTBlock
                     dbCreateRect(self, extBlocklayer, Box(xpos1-salover, ypos2, xpos1+(stripes-1)*(w+ps)-ps+salover, ypos2+w+salover))
-                    dbCreateRect(self, sallayer, Box(xpos1+w+ps-salover, ypos1, xpos1+stripes*(w+ps)-ps+salover, ypos1-w-salover))
+                    dbCreateRect(self, sallayer, Box(xpos1-salover, ypos2, xpos1+(stripes-1)*(w+ps)-ps+salover, ypos2+w+salover))
                     # 09.02.07 GGa added EXTBlock
                     dbCreateRect(self, extBlocklayer, Box(xpos1+w+ps-salover, ypos1, xpos1+stripes*(w+ps)-ps+salover, ypos1-w-salover))
                     dbCreateRect(self, psdlayer, Box(xpos1-psdover, ypos2, xpos1+(stripes-1)*(w+ps)-ps+psdover, ypos2+w+psdover))
