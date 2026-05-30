@@ -15,16 +15,17 @@ v {xschem version=3.4.8RC file_version=1.3
 }
 G {}
 K {type=capacitor
-format="@spiceprefix@name @pinlist @body @model w=@w l=@l Nx=@Nx"
+ format="@spiceprefix@name @pinlist @body @model w=@w l=@l Nx=@Nx mm_ok=@mm_ok"
 lvs_format="C@name @pinlist @body @model w=@w l=@l Nx=@Nx"
 template="name=C1 
 model=sg13_hv_svaricap 
 w=3.74u 
 l=0.3u 
-Nx=1 
-body=sub!
-spiceprefix=X
-"
+ Nx=1 
+ body=sub!
+ spiceprefix=X
+  mm_ok=1
+ "
 drc="svaricap_drc @name @symname @model @w @l @Nx"
 }
 V {}

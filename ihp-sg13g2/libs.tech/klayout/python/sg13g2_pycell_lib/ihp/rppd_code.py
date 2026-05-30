@@ -246,7 +246,7 @@ class rppd(ResistorBase):
             dbCreateRect(self, psdlayer, Box(xpos1-psdover, ypos2+contactpush*dir,
                                              xpos2+psdover, ypos2+(li_salblock+psdover+poly_cont_len+contactpush)*dir))
         else :
-            dbCreateRect(self,  psdlayer, Box(xpos1-psdover, ypos2+(contactpush-salover+psdover)*dir,
+            dbCreateRect(self, psdlayer, Box(xpos1-psdover, ypos2+(contactpush-salover+psdover)*dir,
                                              xpos2+psdover, ypos2+(li_salblock+psdover+poly_cont_len+contactpush)*dir))
         
         # **************************************************************
@@ -302,7 +302,7 @@ class rppd(ResistorBase):
         xpos2 = xpos1+self.w-contoverlay;
         ypos2 = ypos1+(self.l-resshort)*dir;
         # **************************************************************
-        # normal contatcs or outlying contacts?
+        # normal contacts or outlying contacts?
         if contactpush > 0 :   # Contacts are out of Resitorsquare->draw rectangle
             # **************************************************************
             # draw one salblock and pSD over resistor and bends
@@ -370,7 +370,7 @@ class rppd(ResistorBase):
                         dbCreateRect(self, extBlocklayer, Box(xpos1+self.w+self.ps-salover, ypos1, 
                                                               xpos1+(stripes-1)*(self.w+self.ps)-self.ps+salover, ypos1-self.w-salover))
                         dbCreateRect(self, psdlayer, Box(xpos1+self.w+self.ps-psdover, ypos1, 
-                                                             xpos1+(stripes-1)*(self.w+self.ps)-self.ps+psdover, ypos1-self.w-psdover))
+                                                         xpos1+(stripes-1)*(self.w+self.ps)-self.ps+psdover, ypos1-self.w-psdover))
                                                              
         # **************************************************************
         # Resistorbody GatPoly part
@@ -427,7 +427,7 @@ class rppd(ResistorBase):
 
         # **************************************************************
         # EXTBlock
-        # draw ExtBlock for bottom Cont Area
+        # draw ExtBlock for top Cont Area
         dbCreateRect(self, extBlocklayer, Box(xpos1-psdover, ypos2+(lcor+contactpush)*dir,
                                               xpos2+psdover, ypos2+(lcor+contactpush+li_salblock+psdover+poly_cont_len)*dir))
 
@@ -458,14 +458,16 @@ class rppd(ResistorBase):
                             ypos2+(contactpush+consize+li_salblock+li_poly_over+metover+lcor)*dir)
         MkPin(self, f"MINUS{index}", 2, minus_pin_box, metlayer_pin)
 
-        # fill notches in pas layer
+        # fill notches in pSD and EXTBlock layers
         if (self.ps-2.0*psdover < psdNotch) and (self.ps-2.0*psdover > 0.0):
             if stripes > 1:
                 dbCreateRect(self, psdlayer, Box(self.w+psdover, 0, self.w+self.ps-psdover, -li_salblock-poly_cont_len-psdover))
+                dbCreateRect(self, extBlocklayer, Box(self.w+psdover, 0, self.w+self.ps-salover, -li_salblock-poly_cont_len-psdover))
     
             if stripes > 2:
                 xpos1 = xpos1 - self.w - self.ps
                 dbCreateRect(self, psdlayer, Box(xpos1+self.w+psdover, ypos2, xpos1+self.w+self.ps-psdover, ypos2+dir*(li_salblock+poly_cont_len+psdover)))
+                dbCreateRect(self, extBlocklayer, Box(xpos1+self.w+salover, ypos2, xpos1+self.w+self.ps-psdover, ypos2+dir*(li_salblock+poly_cont_len+psdover)))
                 
         # **************************************************************
         # now draw the label
