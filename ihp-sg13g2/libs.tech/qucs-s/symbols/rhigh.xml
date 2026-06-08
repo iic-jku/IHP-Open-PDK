@@ -15,7 +15,7 @@
     <Netlists>
         <NgspiceNetlist value = "{{{Letter}}}::schematic_id='nequal'R{PartCounter} {nets} {bulk} {model} {{w={w}}}::w='nonempty' {{l={l}}}::l='nonempty' b={b} {{m={m}}}::m='nonempty' mm_ok={mm_ok}"> </NgspiceNetlist>
         <CDLNetlist value = "{{{Letter}}}::schematic_id='nequal'R{PartCounter} {nets} {bulk} {model} {{w={w}}}::w='nonempty' {{l={l}}}::l='nonempty' b={b} {{m={m}}}::m='nonempty'"> </CDLNetlist>
-        <XyceNetlist value = "{{{Letter}}}::schematic_id='nequal'R{PartCounter} {nets} {bulk} {model} {{w={w}}}::w='nonempty' {{l={l}}}::l='nonempty' b={b} {{m={m}}}::m='nonempty' mm_ok={mm_ok}"> </XyceNetlist>
+        <XyceNetlist value = "{{{Letter}}}::schematic_id='nequal'R{PartCounter} {nets} {bulk} {model} {{w={w}}}::w='nonempty' {{l={l}}}::l='nonempty' b={b} {{m={m}}}::m='nonempty'"> </XyceNetlist>
     </Netlists>
     <Symbols>
         <Symbol id="Standard">

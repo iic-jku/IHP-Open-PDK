@@ -20,6 +20,10 @@
         <CDLNetlist value=
             "{{{Letter}}}::schematic_id='nequal'M{PartCounter} {nets} {{{model}}}::model='nonempty'
             {{w={w}}}::w='nonempty' {{l={l}}}::l='nonempty' {{ng={ng}}}::ng='nonempty' {{rfmode={rfmode}}}::rfmode='nonempty' {{m={m}}}::m='nonempty'"> </CDLNetlist>
+        <XyceNetlist value=
+            "{{{Letter}}}::schematic_id='nequal'M{PartCounter} {nets} {{{model}}}::model='nonempty'
+            {{w={w}}}::w='nonempty' {{l={l}}}::l='nonempty' {{ng={ng}}}::ng='nonempty' {{rfmode={rfmode}}}::rfmode='nonempty' {{m={m}}}::m='nonempty'">
+        </XyceNetlist>
     </Netlists>
     <Symbols>
         <Symbol id="Standard">

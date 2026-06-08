@@ -18,6 +18,10 @@
             {{Nx={Nx}}}::Nx='nonempty' mm_ok={mm_ok}">
         </NgspiceNetlist>
         <CDLNetlist value="{{{Letter}}}::schematic_id='nequal'Q{PartCounter} {nets} {bulk} {{{model}}}::model='nonempty' {{Nx={Nx}}}::Nx='nonempty'"></CDLNetlist>
+        <XyceNetlist value=
+            "{{{Letter}}}::schematic_id='nequal'Q{PartCounter} {nets} {bulk} {{{model}}}::model='nonempty'
+            {{Nx={Nx}}}::Nx='nonempty'">
+        </XyceNetlist>
     </Netlists>
     <Symbols>
         <Symbol id="Standard">
