@@ -109,6 +109,9 @@ backend option offers 5 thin metal layers, two thick metal layers (2 and 3 μm t
 * KLayout
     * Download: https://www.klayout.de/build.html
     * Source: https://github.com/KLayout/klayout
+* GDSFactory
+    * Documentation: https://gdsfactory.github.io/IHP/
+    * Source: https://github.com/gdsfactory/gdsfactory
 * Magic
     * Download: http://opencircuitdesign.com/magic/download.html
     * Source: https://github.com/RTimothyEdwards/magic
@@ -120,7 +123,7 @@ backend option offers 5 thin metal layers, two thick metal layers (2 and 3 μm t
     * Source: https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts
 * LibreLane
     * Source: https://github.com/librelane/librelane
- 
+
 ## Tool versions (tested with)
 [versions.txt](versions.txt)
 

@@ -355,6 +355,7 @@ def dbCreateEllipse(self, layerId, bbox):
 def dbConvertEllipseToPolygon(self, ellipse, numPoints, grid):
     points = Ellipse.genPolygonPoints(ellipse.getBBox(), numPoints, grid)
     polyId = dbCreatePolygon(self, ellipse.layer, points)
+    dbDeleteObject(ellipse)
 
     return polyId
 

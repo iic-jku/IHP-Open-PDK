@@ -1,15 +1,13 @@
-# IHP GDSFactory PDK 0.0.6
+# GDSFactory: Programmatic Layout
 
-This [repository](https://github.com/gdsfactory/ihp) contains a PDK (Process Design Kit) for the IHP CMOS technology, built using GDSFactory. It includes standard cell libraries, design rules, and example designs to facilitate the development of integrated circuits using this technology.
+[GDSFactory](https://gdsfactory.github.io/IHP/) provides a Python-based alternative to manual layout editors like KLayout. Instead of drawing geometries by hand, you write Python code to generate your layouts, which brings several advantages:
 
-One of the advantages of using GDSFactory for PDK development is its modular and flexible approach to layout design. GDSFactory allows for easy creation and manipulation of layout components, making it straightforward to build and customize standard cells and other layout elements.
+- **AI-assisted design**: generate layout code using AI tools, accelerating the design process.
+- **Automated design**: parameterize and script your cells, enabling batch generation and design-space exploration.
+- **Complex systems**: build hierarchical layouts programmatically, making it easier to create large-scale designs such as photonic or RF systems.
+- **Reproducibility**: layouts defined as code are version-controlled, testable, and shareable.
 
-Advantages of using GDSFactory for PDK development:
-
-- Programmatic layout generation: GDSFactory enables the creation of layout components using Python code, allowing for automation and easy modifications.
-- Team collaboration: GDSFactory's code-based approach facilitates version control and collaboration among team members.
-- Reproducibility: Designs can be easily reproduced and shared, ensuring that others can replicate the results.
-- Modular design: Layout components can be reused and combined to create complex designs, promoting consistency and reducing errors.
+Get started with the IHP GDSFactory plugin at https://gdsfactory.github.io/IHP/.
 
 ## Installation
 

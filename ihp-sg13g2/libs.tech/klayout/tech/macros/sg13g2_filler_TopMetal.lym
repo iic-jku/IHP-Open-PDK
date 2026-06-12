@@ -121,17 +121,21 @@
 	pattern_tm2 = fill_pattern("TM2_FILL_CELL").shape(134, 22, box(0.0, 0.0, width, height))
 	 
 	# Define noFill exclusion layer
+	TM1Fil_b = TopMetal1_filler.dup
+	TM1Fil_b.size(3.0, 3.0, "square_limit")
 	TM1Fil_c = TopMetal1.dup
 	TM1Fil_c.size(3.0, 3.0, "square_limit")
 	TM1Fil_d = TRANS.dup
 	TM1Fil_d.size(4.9, 4.9, "square_limit")
-	exclLayTM1 = TM1Fil_c | TM1Fil_d | TopMetal1_filler | TopMetal1_nofill | TopMetal1_slit | TRANS | NoMetFiller
+	exclLayTM1 = TM1Fil_b | TM1Fil_c | TM1Fil_d | TopMetal1_nofill | TopMetal1_slit | NoMetFiller
 
+	TM2Fil_b = TopMetal2_filler.dup
+	TM2Fil_b.size(3.0, 3.0, "square_limit")
 	TM2Fil_c = TopMetal2.dup
 	TM2Fil_c.size(3.0, 3.0, "square_limit")
 	TM2Fil_d = TRANS.dup
 	TM2Fil_d.size(4.9, 4.9, "square_limit")
-	exclLayTM2 = TM2Fil_c | TM2Fil_d | TopMetal2_filler | TopMetal2_nofill | TopMetal2_slit | TRANS | NoMetFiller
+	exclLayTM2 = TM2Fil_b | TM2Fil_c | TM2Fil_d | TopMetal2_nofill | TopMetal2_slit | NoMetFiller
 
 	# perform fill
 	(EdgeSeal.holes - exclLayTM1).fill(pattern_tm1, hstep(width + distance), vstep(height + distance))
