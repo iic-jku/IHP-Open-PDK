@@ -1,9 +1,8 @@
 flake8
 docopt
 pandas
-klayout
+klayout==0.30.5
 pyyaml
 gdstk
 tqdm
 termcolor
-tkinter
