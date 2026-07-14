@@ -68,6 +68,7 @@ moduleNames = [
         'rfpmosHV_code',
         'NoFillerStack_code',
         'SVaricap_code',
+	'cap_mfringe_code',  # Metal fringe interdigitated capacitor
         'pnpMPA_code',
         'isolbox_code',
         'schottky_code',
