@@ -53,3 +53,15 @@ extract_devices(GeneralNTerminalExtractor.new('sg13_hv_svaricap', 3), {
                   'dev_mk' => varicap_dev_mk,
                   'sub_mk' => ptap
                 })
+
+#========================================
+# ------ CAP_MFRINGE EXTRACTION --------
+#========================================
+
+logger.info('Extracting cap_mfringe device')
+
+extract_devices(CapMfringeExtractor.new('cap_mfringe'), {
+                  'core' => cap_mfringe_marker,
+                  'ports' => cap_mfringe_ports,
+                  'dev_mk' => cap_mfringe_dev_mk
+                })

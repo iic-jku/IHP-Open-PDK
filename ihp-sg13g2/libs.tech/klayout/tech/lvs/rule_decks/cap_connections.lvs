@@ -36,3 +36,17 @@ connect(rfmim_sub, ptap)
 # === svarivap ===
 connect(varicap_ports, cont_drw)
 connect(varicap_ports, text_drw)
+
+#==========================================
+# ------ CAP_MFRINGE CONNECTIONS ----------
+#==========================================
+
+logger.info('Starting CAP_MFRINGE CONNECTIONS')
+
+# Connect cap_mfringe port regions through the metal/via stack.
+# The ports (metal pin shapes) need connectivity to the metal drawing layers
+# and through the via stack for proper net tracing.
+connect(cap_mfringe_ports, metal1_con)
+connect(cap_mfringe_ports, metal2_con)
+connect(cap_mfringe_ports, metal3_con)
+connect(cap_mfringe_ports, metal4_con)

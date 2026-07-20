@@ -240,3 +240,7 @@ end
 #======= CUSTOM ISOLBOX-EXTRACTOR =======
 
 # %include custom_isolbox_extractor.lvs
+
+#======= CUSTOM CAP_MFRINGE-EXTRACTOR =======
+
+# %include cap_mfringe_extractor.lvs
