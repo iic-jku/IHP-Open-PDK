@@ -227,6 +227,8 @@ end
 
 # %include rule_decks/custom_classes.lvs
 
+# %include rule_decks/cap_mfringe_extractor.lvs
+
 # Instantiate a reader using the new delegate
 reader = RBA::NetlistSpiceReader.new(CustomReader.new)
 
@@ -341,6 +343,8 @@ else
 
   # %include rule_decks/cap_derivations.lvs
 
+  # %include rule_decks/cap_mfringe_derivations.lvs
+
   #================================
   # ------ ESD DERIVATIONS --------
   #================================
@@ -364,6 +368,8 @@ else
   #================================================
 
   # %include rule_decks/devices_connections.lvs
+
+  # %include rule_decks/cap_mfringe_connections.lvs
 
   #================================================
   #------------- DEVICES EXTRACTION ---------------
@@ -410,6 +416,8 @@ else
   #==================================
 
   # %include rule_decks/cap_extraction.lvs
+
+  # %include rule_decks/cap_mfringe_extraction.lvs
 
   #================================
   # ------- ESD EXTRACTION --------

@@ -902,7 +902,16 @@
         "sealring_complete_minW": "150u",
         "sealring_complete_maxL": "25000u",
         "sealring_complete_maxW": "32000u",
-        "sealring_complete_edgeBox": "25u"
+        "sealring_complete_edgeBox": "25u",
+        "cap_mfringe_model": "cap_mfringe",
+        "cap_mfringe_defW": "2.0u",
+        "cap_mfringe_defL": "2.0u",
+        "cap_mfringe_minW": "2.0u",
+        "cap_mfringe_maxW": "100.0u",
+        "cap_mfringe_minL": "2.0u",
+        "cap_mfringe_maxL": "100.0u",
+        "cap_mfringe_areacap_m1": 0.67,
+        "cap_mfringe_areacap_mn": 0.55
     },
     "Layers": {
     }

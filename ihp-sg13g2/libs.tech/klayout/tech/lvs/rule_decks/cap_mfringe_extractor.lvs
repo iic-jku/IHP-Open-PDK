@@ -1,0 +1,106 @@
+# frozen_string_literal: true
+
+#==========================================================================
+# Copyright 2026 IHP PDK Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
+#==========================================================================
+
+#================================================
+# ---------- CAP_MFRINGE CUSTOM DEVICE ----------
+#================================================
+
+$logger = logger
+$unit = dbu
+
+# Extractor for cap_mfringe interdigitated metal fringe capacitor.
+# Recognizes the device by the recog_mom (99/39) marker painted by the PCell.
+# Uses DeviceCustomMIM (defined in custom_mim_extractor.lvs, loaded via
+# custom_classes.lvs) for compatibility with the SPICE reader which creates
+# DeviceCustomMIM for all non-varicap capacitor models.
+#
+# Terminal identification by position within the marker:
+#   mim_top = port with lower x-center (left side, corresponds to PCell c1)
+#   mim_btm = port with higher y-center (top side, corresponds to PCell c2)
+class CapMfringeExtractor < RBA::GenericDeviceExtractor
+  def initialize(name)
+    self.name = name
+    @name = name
+  end
+
+  def setup
+    define_layers
+    @reg_dev = DeviceCustomMIM.new(@name)
+    register_device_class(@reg_dev)
+  end
+
+  def get_connectivity(_layout, layers)
+    core   = layers[0]  # recog_mom marker
+    ports  = layers[1]  # metal pin shapes within marker
+    dev_mk = layers[2]  # device marker (same as core)
+
+    conn = RBA::Connectivity.new
+    conn.connect(core, core)
+    conn.connect(core, dev_mk)
+    conn.connect(ports, dev_mk)
+    conn
+  end
+
+  def extract_devices(layer_geometry)
+    core, ports, dev_mk = layer_geometry
+
+    dev_mk.merged.each do |_region|
+      port_polygons = []
+      ports.each { |p| port_polygons << p }
+
+      if port_polygons.size < 2
+        $logger.info("cap_mfringe: expected 2 port regions, found #{port_polygons.size}")
+        next
+      end
+
+      device = create_device
+
+      # Measure W and L from the marker bounding box
+      bbox = core.merged.bbox
+      device.set_parameter('w', bbox.width * $unit)
+      device.set_parameter('l', bbox.height * $unit)
+
+      # Assign terminals by position:
+      # mim_top = port with lower x-center (left side of device)
+      # mim_btm = port with higher y-center (top side of device)
+      sorted = port_polygons.sort_by { |p| p.bbox.center.x }
+      top_poly = sorted[0]
+      btm_poly = sorted[-1]
+
+      # If both have similar x, use y to disambiguate
+      if (top_poly.bbox.center.x - btm_poly.bbox.center.x).abs < 100
+        sorted = port_polygons.sort_by { |p| p.bbox.center.y }
+        top_poly = sorted[0]
+        btm_poly = sorted[-1]
+      end
+
+      # Both terminals on layer 1 (ports) which has metal connectivity
+      define_terminal(device, @reg_dev.terminal_id('mim_top'), 1, top_poly)
+      define_terminal(device, @reg_dev.terminal_id('mim_btm'), 1, btm_poly)
+    end
+  end
+
+  private
+
+  def define_layers
+    define_layer('core', 'cap_mfringe recognition marker (Recog.mom)')
+    define_layer('ports', 'Terminal connection ports (metal pins)')
+    define_layer('dev_mk', 'Device marker')
+  end
+end

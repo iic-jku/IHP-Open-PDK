@@ -1,0 +1,38 @@
+# frozen_string_literal: true
+
+#==========================================================================
+# Copyright 2026 IHP PDK Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
+#==========================================================================
+
+#========================================
+# ----- CAP_MFRINGE DERIVATIONS --------
+#========================================
+
+logger.info('Starting CAP_MFRINGE DERIVATIONS')
+
+# The cap_mfringe device is identified by the recog_mom marker (GDS 99/39).
+# The PCell paints this marker over the full device area.
+cap_mfringe_marker = recog_mom
+
+# Device marker for extraction
+cap_mfringe_dev_mk = cap_mfringe_marker
+
+# Port identification: metal pin shapes (c1, c2) within the device marker.
+# The PCell places MkPin shapes on the top metal's pin layer.
+# Combine all metal pin layers and intersect with the marker.
+cap_mfringe_ports = metal1_pin.join(metal2_pin)
+                    .join(metal3_pin).join(metal4_pin)
+                    .and(cap_mfringe_marker)
