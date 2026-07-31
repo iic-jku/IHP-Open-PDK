@@ -33,6 +33,7 @@ T {Transient} 380 -790 0 0 0.8 0.8 {}
 T {AC} 730 -790 0 0 0.8 0.8 {}
 T {Monte Carlo} 1060 -790 0 0 0.8 0.8 {}
 T {S-param} 1420 -790 0 0 0.8 0.8 {}
+T {sg13g2_io} 2440 -795 0 0 0.8 0.8 {}
 T {Tools} 1770 -790 0 0 0.8 0.8 {}
 T {Isolated} 2110 -790 0 0 0.8 0.8 {}
 C {devices/title.sym} 160 -30 0 0 {name=l5 author="Copyright 2023 IHP PDK Authors"}
@@ -84,3 +85,4 @@ C {sg13g2_tests/iso_dc_res.sym} 2220 -630 0 0 {name=x40}
 C {sg13g2_tests/dc_schottky.sym} 180 -80 0 0 {name=x41}
 C {sg13g2_tests/tran_moscap_n.sym} 520 -550 0 0 {name=x42}
 C {sg13g2_tests/tran_moscap_p.sym} 520 -510 0 0 {name=x43}
+C {sg13g2_tests/sg13g2_IOPad_tb.sym} 2545 -710 0 0 {name=x42}
