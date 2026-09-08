@@ -72,6 +72,8 @@ moduleNames = [
         'cap_cmomi_code',      # MoM capacitor (M1-M4 thin-metal stack)
         'cap_cmomf_code',      # MoM fringe capacitor (M1-M4 thin-metal stack)
         'guard_ring_code',     # Symlink - standalone guard ring cell
+        # TBD
+        'chipText_code',       # Symlink - chipText
 ]
 
 def getProcessNames():
