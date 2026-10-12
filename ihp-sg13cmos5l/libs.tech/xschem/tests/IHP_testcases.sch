@@ -32,6 +32,7 @@ T {Transient} 380 -770 0 0 0.8 0.8 {}
 T {AC} 730 -770 0 0 0.8 0.8 {}
 T {Monte Carlo} 1060 -770 0 0 0.8 0.8 {}
 T {S-param} 1440 -770 0 0 0.8 0.8 {}
+T {sg13cmos5l_io} 1740 -770 0 0 0.8 0.8 {}
 C {devices/title.sym} 160 -30 0 0 {name=l5 author="Copyright 2023 IHP PDK Authors"}
 C {devices/launcher.sym} 90 -820 0 0 {name=h1
 descr="IHP-Open-PDK"
@@ -63,3 +64,4 @@ C {tests/tran_moscap_n.sym} 520 -570 0 0 {name=x3}
 C {tests/tran_moscap_p.sym} 520 -530 0 0 {name=x4}
 C {tests/tran_cap_cmomi.sym} 520 -490 0 0 {name=x50}
 C {tests/tran_cap_cmomf.sym} 520 -450 0 0 {name=x51}
+C {tests/sg13cmos5l_IOPad_tb.sym} 1880 -690 0 0 {name=x35}
