@@ -441,6 +441,8 @@ if { [file isdir ${PDK_ROOT}/${PDK}/libs.ref/sg13g2_stdcell_hv/sym/xschem] } {
   # thick-oxide stdcell symbols resolve their schematics through this
   set ::SG13G2_HV_SCH ${PDK_ROOT}/${PDK}/libs.ref/sg13g2_stdcell_hv/sch/xschem
 }
+append XSCHEM_LIBRARY_PATH :${PDK_ROOT}/${PDK}/libs.ref/sg13g2_io/sym/xschem
+
 
 # allow a user-specific path add-on (https://github.com/iic-jku/iic-osic-tools/issues/7)
 if {[info exists ::env(XSCHEM_USER_LIBRARY_PATH)]} {
@@ -534,6 +536,7 @@ proc stdcell_select_view_dialog {} {
 }
 
 proc hierarchy_config {symname} {
+    #puts "$symname"
     global stdcell_view
     global stdcell_sym_type
     
@@ -568,4 +571,19 @@ proc hierarchy_config {symname} {
 proc symtype {} {
     global stdcell_sym_type
     return $stdcell_sym_type
+}
+
+proc hierarchy_config_io {symname} {
+     #puts "symname: $symname"
+     set sch_dir [file normalize [file join \
+        $::PDK_ROOT \
+        $::PDK \
+        libs.ref \
+        sg13g2_io\
+        sch\
+        xschem]]
+    set cell [file rootname [file tail $symname]]
+    #puts "cell: $cell"
+    set sch [file join $sch_dir "${cell}.sch"]
+    return $sch
 }
